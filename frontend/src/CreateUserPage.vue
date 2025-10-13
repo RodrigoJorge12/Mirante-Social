@@ -1,27 +1,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Header from '@/Header.vue';
-import { useRouter } from "vue-router";
-
 
 const email = ref("");
 const password = ref("");
-const router = useRouter();
-
 
 function handleLogin() {
   alert(`Login com: ${email.value} / ${password.value}`);
 }
-function goToCreateUserPage() {
-  router.push("/createUser");
-}
 </script>
 
 <template>
-  <Header/>
-  <div class="login-card">
+  <Header />
+  <div class="create-user-card">
     <h2 class="title">MIRANTE SOCIAL</h2>
-    <form class="formLogin" @submit.prevent="handleLogin">
+    <form class="formCreateUser">
+        <input
+        class="inputNome"
+        placeholder="Nome Completo"
+        required
+      />
       <input
         class="inputEmail"
         v-model="email"
@@ -36,21 +34,19 @@ function goToCreateUserPage() {
         placeholder="Senha"
         required
       />
-      <button type="submit" class="btnFormLogin">Login</button>
+      <button type="submit" class="btnFormCreateUser">Cadastrar</button>
     </form>
-    <button>Esqueceu a senha</button>
-    <button @click="goToCreateUserPage()">Não tem conta? Cadastre-se</button>
   </div>
 </template>
 
 <style scoped>
-.login-card{
+.create-user-card{
   display: flex;
   flex-direction: column;
   padding-top: 10vh;
   gap: 3vh;
 }
-.formLogin{
+.formCreateUser{
   display: flex;
   flex-direction: column;
   gap: 1vh;
@@ -59,7 +55,7 @@ function goToCreateUserPage() {
   color: #10B981;
   font-weight: bold;
 }
-.btnFormLogin, .login-card button{
+.btnFormCreateUser, .reate-user-card button{
   color: #10B981;
   font-weight: bold;
 }
