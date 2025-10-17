@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Header from '@/Header.vue';
-
+import { PresenterUsuario } from "./Presenters/PresenterUsuario";
+const presenter = new PresenterUsuario();
 const email = ref("");
 const password = ref("");
+const name = ref("");
+
+function sendDataCreatUser(){
+  presenter.createUser(name.value, email.value, password.value);
+}
+
 
 function handleLogin() {
   alert(`Login com: ${email.value} / ${password.value}`);
@@ -17,6 +24,7 @@ function handleLogin() {
     <form class="formCreateUser">
         <input
         class="inputNome"
+        v-model="name"
         placeholder="Nome Completo"
         required
       />
@@ -34,7 +42,7 @@ function handleLogin() {
         placeholder="Senha"
         required
       />
-      <button type="submit" class="btnFormCreateUser">Cadastrar</button>
+      <button @click="sendDataCreatUser()" type="submit" class="btnFormCreateUser">Cadastrar</button>
     </form>
   </div>
 </template>
