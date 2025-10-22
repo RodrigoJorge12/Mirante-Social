@@ -3,17 +3,17 @@ export class ServiceUsuario{
     constructor(){
         this.backendURL = import.meta.env.VITE_API_URL;
     }
-    async createUser(nome: string, login : string, senha : string){
+    async createUser(nome: string, email : string, senha : string){
         try {
-            const response = await fetch(this.backendURL + "/users", {
+            const response = await fetch(this.backendURL + "/api/users", {
                 method : "POST",
                 headers : {
                     "Content-Type": "application/json"
                 },
-                credentials: "include",
+                // credentials: "include",
                 body : JSON.stringify({
                     nome : nome,
-                    login : login,
+                    email : email,
                     senha : senha
                 })
             });

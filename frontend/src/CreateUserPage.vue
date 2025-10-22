@@ -6,9 +6,10 @@ const presenter = new PresenterUsuario();
 const email = ref("");
 const password = ref("");
 const name = ref("");
-
-function sendDataCreatUser(){
-  presenter.createUser(name.value, email.value, password.value);
+async function sendDataCreatUser(event: Event) {
+  event.preventDefault();
+  await presenter.createUser(name.value, email.value, password.value);
+  alert(`Usuário ${name.value} cadastrado com sucesso!`);
 }
 
 
@@ -42,7 +43,7 @@ function handleLogin() {
         placeholder="Senha"
         required
       />
-      <button @click="sendDataCreatUser()" type="submit" class="btnFormCreateUser">Cadastrar</button>
+      <button @click="sendDataCreatUser($event)" type="submit" class="btnFormCreateUser">Cadastrar</button>
     </form>
   </div>
 </template>
