@@ -6,9 +6,11 @@
     class UserRepositoryInRD implements UserRepository{
         function Create($user){
             return DB::table('users')->insert([
-                'nome' => $user->name,
+                'name' => $user->name,
                 'email' => $user->email,
-                'senha' => $user->password
+                'password' => $user->password,
+                'created_at' => now(),
+                'valid' => false 
             ]);
         }
     }
