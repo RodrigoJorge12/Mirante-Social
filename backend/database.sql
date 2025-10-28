@@ -1,9 +1,9 @@
-create TABLE usuarios (
+create TABLE users (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL,
-    criado_em timestamp ,
-    atualizado_em timestamp,
-    validado boolean
+    password VARCHAR(255) NOT NULL,
+    created_at timestamp ,
+    updated_at timestamp,
+    valid boolean
 );
