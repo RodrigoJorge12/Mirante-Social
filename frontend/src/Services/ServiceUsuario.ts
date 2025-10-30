@@ -30,4 +30,31 @@ export class ServiceUsuario{
             return;
         }
     }
+    async verifyEmailCode(email: string, code : string){
+                try {
+            const response = await fetch(this.backendURL + "/api/verifyEmail", {
+                method : "POST",
+                headers : {
+                    "Content-Type": "application/json"
+                },
+                // credentials: "include",
+                body : JSON.stringify({
+                    email : email,
+                    code : code
+                })
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
+
 }

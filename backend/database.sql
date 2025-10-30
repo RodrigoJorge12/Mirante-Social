@@ -7,3 +7,12 @@ create TABLE users (
     updated_at timestamp,
     valid boolean
 );
+
+create TABLE validations (
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    user_id INTEGER REFERENCES users(id),
+    code VARCHAR(6) NOT NULL,
+    time VARCHAR(20),
+    created_at timestamp
+);

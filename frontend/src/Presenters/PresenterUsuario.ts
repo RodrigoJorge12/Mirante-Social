@@ -15,4 +15,7 @@ export class PresenterUsuario{
         }
         return await this.service.createUser(nome, login, senha);
     }
+    async verifyEmailCode(email: string, code : string){
+        return this.service.verifyEmailCode(email, code);
+    }
 }

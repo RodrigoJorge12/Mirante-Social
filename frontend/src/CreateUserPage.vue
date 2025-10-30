@@ -2,6 +2,10 @@
 import { ref } from "vue";
 import Header from '@/Header.vue';
 import { PresenterUsuario } from "./Presenters/PresenterUsuario";
+import ModalEmailValidation  from './ModalEmailValidation.vue';
+
+const showModal = ref(false)
+
 const presenter = new PresenterUsuario();
 const email = ref("");
 const password = ref("");
@@ -9,7 +13,7 @@ const name = ref("");
 async function sendDataCreatUser(event: Event) {
   event.preventDefault();
   await presenter.createUser(name.value, email.value, password.value);
-  alert(`Usuário ${name.value} cadastrado com sucesso!`);
+  showModal.value = true
 }
 
 
@@ -45,6 +49,11 @@ function handleLogin() {
       />
       <button @click="sendDataCreatUser($event)" type="submit" class="btnFormCreateUser">Cadastrar</button>
     </form>
+      <ModalEmailValidation
+      v-if="showModal"
+      :email="email"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
