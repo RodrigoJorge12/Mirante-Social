@@ -5,7 +5,7 @@ create TABLE users (
     password VARCHAR(255) NOT NULL,
     created_at timestamp ,
     updated_at timestamp,
-    valid boolean
+    valid boolean default false
 );
 
 create TABLE validations (
@@ -14,5 +14,6 @@ create TABLE validations (
     user_id INTEGER REFERENCES users(id),
     code VARCHAR(6) NOT NULL,
     time VARCHAR(20),
-    created_at timestamp
+    created_at timestamp,
+    updated_at timestamp
 );

@@ -18,7 +18,6 @@ function goToCreateUserPage() {
 </script>
 
 <template>
-  <Header/>
   <div class="login-card">
     <h2 class="title">MIRANTE SOCIAL</h2>
     <form class="formLogin" @submit.prevent="handleLogin">

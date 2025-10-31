@@ -1,42 +1,60 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-class UserController extends Controller{
-    private $userRepository;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Services\UserService;
+use Illuminate\Support\Facades\Validator;
+class UserController extends Controller
+{
+    private UserService $userService;
 
-    public function __construct($userRepository){
-        $this->userRepository = $userRepository;
-    }
-    public function validateEmailUser($user){
-        $userFound = $this->userRepository->FindByEmail($user->email);
-        if($userFound){
-            $code = random_int(100000, 999999);
-            $validationData = [
-                'type' => 'email_validation',
-                'user_id' => $userFound->id,
-                'code' => $code,
-                'time' => now()->addMinutes(30),
-                'created_at' => now()
-            ];
-            $this->userRepository->CreateValidation($validationData);
-            Mail::raw("Olá {$user->name}, bem-vindo ao Mirante Social! O seu codigo de validação é $code. ele é valido por apenas 30 minutos", function ($message) use ($user) {
-            $message->to($user->email, $user->name)
-                    ->subject('Bem-vindo ao Mirante Social');
-        });
-        }
-    }
-    public function SendEmailUser($user){
-        
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
     }
 
-    public function create($user){
-        $userCreated = $this->userRepository->Create($user);
-        if ($userCreated){
-            $this->validateEmailUser($user);
+    /**
+     * Create a new user.
+     */
+    public function create(Request $request): JsonResponse
+    {
+        try {
+            // Validate request data
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Dados inválidos',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Create user using service
+            $user = $this->userService->createUser($validator->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Usuário criado com sucesso',
+                'data' => [
+                    'name' => $user->name,
+                    'email' => $user->email
+                ]
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Error creating user', ['error' => $e->getMessage()]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
         }
-        Log::info('User created: ', (array)json_decode($userCreated));
-        return $user;
     }
 }
 ?>

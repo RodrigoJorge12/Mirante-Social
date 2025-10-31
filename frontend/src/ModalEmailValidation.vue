@@ -9,7 +9,8 @@ const emit = defineEmits(['close', 'verify'])
 
 async function VerifyCode(event: Event) {
   event.preventDefault();
-  PresenterUsuario.verifyEmailCode(props.email, code.value);
+  let presenter = new PresenterUsuario();
+  await presenter.verifyEmailCode(props.email, code.value);
 }
 const code = ref('')
 </script>

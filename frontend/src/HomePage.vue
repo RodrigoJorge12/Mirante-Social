@@ -12,16 +12,13 @@ function goToLoginPage() {
 </script>
 
 <template>
-  <div class="page">
-    <Header />
-  </div>
 </template>
 
 <style scoped>
 .page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* ocupa a altura toda da tela */
+  /* min-height: 100vh; ocupa a altura toda da tela */
   background: #fff;
   margin: 0;
   padding: 0;

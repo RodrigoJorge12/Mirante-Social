@@ -12,9 +12,9 @@ export class ServiceUsuario{
                 },
                 // credentials: "include",
                 body : JSON.stringify({
-                    nome : nome,
+                    name : nome,
                     email : email,
-                    senha : senha
+                    password : senha
                 })
             });
             if(!response.ok){

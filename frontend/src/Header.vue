@@ -11,7 +11,6 @@ function goToLoginPage() {
 </script>
 
 <template>
-  <div class="page">
     <header class="header">
       <h2 class="title">Mirante Social</h2>
       <ul class="list">
@@ -23,14 +22,12 @@ function goToLoginPage() {
       </ul>
       <button @click="goToLoginPage()" class="btnLogin" ref="btnLogin">Login</button>
     </header>
-  </div>
 </template>
 
 <style scoped>
 .page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* ocupa a altura toda da tela */
   background: #fff;
   margin: 0;
   padding: 0;

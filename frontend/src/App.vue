@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
-  import HomePage from '@/HomePage.vue'
+  import Header from '@/Header.vue';
 </script>
 <template>
+  <Header />
   <RouterView />
 </template>
 

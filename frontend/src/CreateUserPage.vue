@@ -23,7 +23,6 @@ function handleLogin() {
 </script>
 
 <template>
-  <Header />
   <div class="create-user-card">
     <h2 class="title">MIRANTE SOCIAL</h2>
     <form class="formCreateUser">
