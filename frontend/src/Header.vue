@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 
 const router = useRouter();
 
@@ -20,7 +21,8 @@ function goToLoginPage() {
         <li><a>Cadastrar Projeto</a></li>
         <li><a>Sobre</a></li>
       </ul>
-      <button @click="goToLoginPage()" class="btnLogin" ref="btnLogin">Login</button>
+      <MiranteSocialButton @click="goToLoginPage()">Login</MiranteSocialButton>
+      <!-- <button  class="btnLogin">Login</button> -->
     </header>
 </template>
 
@@ -70,12 +72,5 @@ function goToLoginPage() {
   font-weight: bold;
   color: black;
 }
-.btnLogin{
-  border: none;
-  font: inherit;
-  color: #10B981;
-  background-color: #FFFFFF;
-  font-weight: bold;
 
-}
 </style>

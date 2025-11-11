@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue'
 import { PresenterUsuario } from './Presenters/PresenterUsuario';
+import MiranteSocialButton from "./components/MiranteSocialButton.vue";
+import MiranteSocialErrorToast from "./components/MiranteSocialErrorToast.vue";
+
 
 const props = defineProps({
   email: { type: String, required: true }
@@ -10,7 +13,13 @@ const emit = defineEmits(['close', 'verify'])
 async function VerifyCode(event: Event) {
   event.preventDefault();
   let presenter = new PresenterUsuario();
-  await presenter.verifyEmailCode(props.email, code.value);
+  let verified = await presenter.verifyEmailCode(props.email, code.value);
+  if(verified.success){
+    emit('close');
+  }
+  // else{
+  //   useErrorToast('Falha ao enviar email de validação')
+  // }
 }
 const code = ref('')
 </script>
@@ -29,8 +38,8 @@ const code = ref('')
       />
 
       <div class="buttons">
-        <button @click="VerifyCode($event)">Confirmar</button>
-        <button @click="emit('close')">Fechar</button>
+        <MiranteSocialButton @click="VerifyCode($event)">Confirmar</MiranteSocialButton>
+        <MiranteSocialButton @click="emit('close')">Fechar</MiranteSocialButton>
       </div>
     </div>
   </div>
@@ -76,7 +85,7 @@ const code = ref('')
   gap: 10px;
 }
 
-button {
+/* button {
   flex: 1;
   padding: 8px;
   border: none;
@@ -90,5 +99,5 @@ button {
 button:last-child {
   background-color: #ccc;
   color: black;
-}
+} */
 </style>
