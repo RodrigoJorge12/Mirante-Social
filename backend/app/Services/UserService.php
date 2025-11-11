@@ -32,7 +32,7 @@ class UserService
                 "Olá {$user->name}, bem-vindo ao Mirante Social! O seu codigo de validação é {$validation->code}. ele é valido por apenas 30 minutos",
                 "Bem-vindo ao Mirante Social!"
             );
-            
+
 
             Log::info('User created successfully', [
                 'user_id' => $user->id,
@@ -40,7 +40,6 @@ class UserService
             ]);
 
             return $user;
-
         } catch (Exception $e) {
             Log::error('Error creating user', [
                 'error' => $e->getMessage(),
@@ -49,6 +48,13 @@ class UserService
             throw $e;
         }
     }
-
-
+    public function validateUserByEmail($email)
+    {
+        $user = $this->userRepository->findByEmail($email);
+        if (!$user) {
+            throw new Exception("Usuário não encontrado");
+        }
+        $validateUserByEmail = $this->userRepository->validateUserByEmail($email);
+        return $user;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -10,7 +11,7 @@ use App\Repository\ValidationRepository;
 class ValidationService
 {
     public function __construct(
-        private ValidationRepository $validationRepository
+        private ValidationRepository $validationRepository,
     ) {}
 
     public function sendEmail($toEmail, $toName, $message, $subject)
@@ -43,5 +44,19 @@ class ValidationService
             'data' => $validationData,
         ]);
         return $this->validationRepository->create($validationData);
+    }
+    public function verifyCode($email, $code)
+    {
+        $validation = $this->validationRepository->findByEmailAndCode($email, $code);
+        if (!$validation) {
+            throw new Exception("Código inválido ou expirado");
+        }
+        $this->validateUser($email);
+        return $validation;
+    }
+    public function validateUser($email)
+    {
+        $userService = app(UserService::class);
+        return $userService->validateUserByEmail($email);
     }
 }
