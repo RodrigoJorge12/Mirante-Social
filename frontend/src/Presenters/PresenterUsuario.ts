@@ -5,6 +5,9 @@ export class PresenterUsuario{
     constructor(){
         this.service = new ServiceUsuario();
     }
+    async login(email : string, senha : string){
+        return this.service.login(email, senha);
+    }
     async validUserData(nome: string, login : string, senha : string){
         return true;
     }
@@ -17,5 +20,8 @@ export class PresenterUsuario{
     }
     async verifyEmailCode(email: string, code : string){
         return this.service.verifyEmailCode(email, code);
+    }
+    async verifyIfIsLogged(){
+        return this.service.verifyIfIsLogged();
     }
 }

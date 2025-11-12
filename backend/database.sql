@@ -5,7 +5,8 @@ create TABLE users (
     password VARCHAR(255) NOT NULL,
     created_at timestamp ,
     updated_at timestamp,
-    valid boolean default false
+    valid boolean default false,
+    remember_token VARCHAR(100) NULL;
 );
 
 create TABLE validations (

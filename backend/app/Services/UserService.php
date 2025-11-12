@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Validation;
 use App\Repository\UserRepository;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -55,6 +56,15 @@ class UserService
             throw new Exception("Usuário não encontrado");
         }
         $validateUserByEmail = $this->userRepository->validateUserByEmail($email);
+        return $user;
+    }
+    public function login($email, $password)
+    {
+        $user = $this->userRepository->validateUserCredentials($email, $password);
+        if (!$user) {
+            throw new Exception("Credenciais inválidas");
+        }
+        Auth::guard('web')->login($user);
         return $user;
     }
 }

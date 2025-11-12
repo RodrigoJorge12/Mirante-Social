@@ -56,5 +56,52 @@ export class ServiceUsuario{
             return;
         }
     }
-
+    async login(email : string, senha : string){
+        try {
+            const response = await fetch(this.backendURL + "/api/login", {
+                method : "POST",
+                headers : {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body : JSON.stringify({
+                    email : email,
+                    password : senha
+                })
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
+    async verifyIfIsLogged(){
+        try {
+            const response = await fetch(this.backendURL + "/api/verifyIfIsLogged", {
+                method : "GET",
+                headers : {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
 }

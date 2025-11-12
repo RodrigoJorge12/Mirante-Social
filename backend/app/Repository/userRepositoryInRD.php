@@ -22,4 +22,12 @@ class UserRepositoryInRD implements UserRepository
         return User::where('email', $email)
             ->update(['valid' => true]);
     }
+    public function validateUserCredentials($email, $password)
+    {
+        $user = User::where('email', $email)->first();
+        if ($user && password_verify($password, $user->password)) {
+            return $user;
+        }
+        return null;
+    }
 }

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     private UserService $userService;
@@ -56,5 +57,87 @@ class UserController extends Controller
             ], 500);
         }
     }
-}
+
+    public function login(Request $request): JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email|exists:users,email',
+                'password' => 'required|string|min:6',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Dados inválidos',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Login do usuário (autentica e cria sessão)
+            $user = $this->userService->login(
+                $validator->validated()['email'],
+                $validator->validated()['password']
+            );
+
+            // 🔥 Garante que o cookie da sessão seja enviado
+            $response = response()->json([
+                'success' => true,
+                'message' => 'Usuário logado com sucesso',
+                'data' => [
+                    'email' => $user->email,
+                    'id' => $user->id,
+                    'name' => $user->name
+                ]
+            ], 200);
+
+            // 👉 Aqui Laravel anexa o cookie de sessão automaticamente
+            return $response;
+
+        } catch (\Exception $e) {
+            Log::error('Error logging user', ['error' => $e->getMessage()]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function verifyIfIsLogged(): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            Log::info('Usuário autenticado:', [
+                'user' => $user,
+                'session_id' => session()->getId(),
+            ]);
+            // Verifica se o usuário está autenticado
+            if (!Auth::check()) {
+                return response()->json([
+                    'authenticated' => false,
+                    'message' => 'Usuário não está logado'
+                ], 401);
+            }
+
+
+            return response()->json([
+                'authenticated' => true,
+                'data' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'authenticated' => false,
+                'message' => 'Erro ao verificar sessão',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    }
 ?>

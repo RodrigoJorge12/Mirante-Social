@@ -1,13 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
+import { PresenterUsuario } from "./Presenters/PresenterUsuario"
 
 const router = useRouter();
+const presenter = new PresenterUsuario()
 
 function goToLoginPage() {
   router.push("/login"); 
 }
+function logout() {
+  return true
+}
+
+// variável reativa que indica se está logado
+const isLogged = ref(false);
+
+// verifica login quando o componente monta
+onMounted(async () => {
+  try {
+    const result = await presenter.verifyIfIsLogged();
+    isLogged.value = !!(result && result.authenticated);
+    console.log("isLogged:", result);
+  } catch {
+    isLogged.value = false;
+  }
+});
 
 </script>
 
@@ -21,7 +40,9 @@ function goToLoginPage() {
         <li><a>Cadastrar Projeto</a></li>
         <li><a>Sobre</a></li>
       </ul>
-      <MiranteSocialButton @click="goToLoginPage()">Login</MiranteSocialButton>
+      <MiranteSocialButton @click="isLogged ? logout() : goToLoginPage()">
+      {{ isLogged ? "Logout" : "Login" }}
+    </MiranteSocialButton>
       <!-- <button  class="btnLogin">Login</button> -->
     </header>
 </template>

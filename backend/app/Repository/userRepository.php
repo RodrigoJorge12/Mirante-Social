@@ -7,4 +7,5 @@ interface UserRepository
     function create($user);
     function findByEmail($email);
     function validateUserByEmail($email);
+    function validateUserCredentials($email, $password);
 }

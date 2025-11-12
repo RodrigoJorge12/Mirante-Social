@@ -33,7 +33,7 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
    ```
    O back-end será executado na porta indicada no terminal, geralmente:
    ```
-   http://localhost:8000
+   http://127.0.0.1:8000
    ```
 
 4. Abra outro terminal (ou uma nova aba) e entre na pasta do **front-end**:
@@ -48,11 +48,11 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
 
 6. Inicie o servidor de desenvolvimento do front-end:
    ```bash
-   npm run dev
+   npm run dev -- --host 127.0.0.1
    ```
    O front-end será executado na porta exibida no terminal, geralmente:
    ```
-   http://localhost:5173
+   http://127.0.0.1:5173
    ```
 
 7. Localize o arquivo `database.sql` dentro da pasta do **back-end**.

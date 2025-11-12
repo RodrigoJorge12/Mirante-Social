@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus"
 import type { FormInstance, FormRules } from "element-plus"
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
+import { PresenterUsuario } from "./Presenters/PresenterUsuario"
 
 interface LoginForm {
   email: string
@@ -28,7 +29,7 @@ const rules: FormRules<LoginForm> = {
     { min: 6, message: "A senha deve ter no mínimo 6 caracteres", trigger: "blur" },
   ],
 }
-
+const presenter = new PresenterUsuario()
 // ✅ Método correto sem erro de tipo
 const submitForm = async () => {
   if (!formRef.value) return
@@ -36,8 +37,14 @@ const submitForm = async () => {
   try {
     const valid = await formRef.value.validate()
     if (valid) {
-      ElMessage.success(`Login com: ${form.email} / ${form.password}`)
-      // aqui você pode chamar o PresenterUsuario ou API de login
+      const login = await presenter.login(form.email, form.password);
+      if(login && login.success){
+        ElMessage.success("Login realizado com sucesso!")
+        router.push("/home");
+      }
+      else{
+        ElMessage.error("Credenciais inválidas. Tente novamente.")
+      }
     }
   } catch {
     ElMessage.error("Por favor, corrija os erros antes de enviar.")
