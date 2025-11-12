@@ -10,5 +10,10 @@ Route::get('/', function () {
 
 Route::post('/users', [UserController::class, 'create']);
 Route::post('/verifyEmail', [ValidationController::class, 'verifyCode']);
-Route::post('/login', [UserController::class, 'login']);
-Route::get('/verifyIfIsLogged', [UserController::class, 'verifyIfIsLogged']);
+
+// ⚙️ Rotas que precisam gravar e ler sessão — força o middleware 'web'
+Route::middleware(['web'])->group(function () {
+    Route::post('/api/login', [UserController::class, 'login']);
+    Route::get('/api/verifyIfIsLogged', [UserController::class, 'verifyIfIsLogged']);
+    Route::post('/api/logout', [UserController::class, 'logout']);
+});

@@ -34,12 +34,6 @@ class UserService
                 "Bem-vindo ao Mirante Social!"
             );
 
-
-            Log::info('User created successfully', [
-                'user_id' => $user->id,
-                'email' => $user->email
-            ]);
-
             return $user;
         } catch (Exception $e) {
             Log::error('Error creating user', [
@@ -67,4 +61,29 @@ class UserService
         Auth::guard('web')->login($user);
         return $user;
     }
+    public function verifyIfIsLogged(): array
+    {
+        if (!Auth::check()) {
+            return [
+                'authenticated' => false,
+                'message' => 'Usuário não está logado'
+            ];
+        }
+
+        $user = Auth::user();
+
+        return [
+            'authenticated' => true,
+            'data' => [
+                'id' => $user->id,
+                'name' => $user->name,
+            ]
+        ];
+    }
+
+    public function logout(): void
+    {
+        Auth::guard('web')->logout();
+    }
+    
 }

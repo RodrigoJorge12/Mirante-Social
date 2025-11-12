@@ -24,4 +24,7 @@ export class PresenterUsuario{
     async verifyIfIsLogged(){
         return this.service.verifyIfIsLogged();
     }
+    async logout(){
+        return this.service.logout();
+    }
 }

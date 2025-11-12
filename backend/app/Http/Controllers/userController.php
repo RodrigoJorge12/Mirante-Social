@@ -108,36 +108,38 @@ class UserController extends Controller
     public function verifyIfIsLogged(): JsonResponse
     {
         try {
-            $user = Auth::user();
+            $result = $this->userService->verifyIfIsLogged();
 
-            Log::info('Usuário autenticado:', [
-                'user' => $user,
-                'session_id' => session()->getId(),
-            ]);
-            // Verifica se o usuário está autenticado
-            if (!Auth::check()) {
-                return response()->json([
-                    'authenticated' => false,
-                    'message' => 'Usuário não está logado'
-                ], 401);
+            if (!$result['authenticated']) {
+                return response()->json($result, 401);
             }
 
-
-            return response()->json([
-                'authenticated' => true,
-                'data' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                ]
-            ], 200);
+            return response()->json($result, 200);
 
         } catch (\Exception $e) {
+            \Log::error('Erro ao verificar login', ['error' => $e->getMessage()]);
             return response()->json([
                 'authenticated' => false,
-                'message' => 'Erro ao verificar sessão',
-                'error' => $e->getMessage()
+                'message' => 'Erro interno do servidor'
             ], 500);
         }
     }
+
+    public function logout(Request $request): JsonResponse
+    {
+        try {
+            $this->userService->logout();
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout realizado com sucesso'
+            ], 200);
+        } catch (\Exception $e) {
+            \Log::error('Erro ao fazer logout', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
     }
+}
 ?>

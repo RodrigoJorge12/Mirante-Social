@@ -104,4 +104,23 @@ export class ServiceUsuario{
             return;
         }
     }
+    async logout(){
+        try {
+            const response = await fetch(this.backendURL + "/api/logout", {
+                method : "POST",
+                headers : {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+            });
+            if(!response.ok){
+                return;
+            }
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
 }

@@ -10,8 +10,21 @@ const presenter = new PresenterUsuario()
 function goToLoginPage() {
   router.push("/login"); 
 }
-function logout() {
-  return true
+
+// função assíncrona para logout
+async function logout() {
+  try {
+    const response = await presenter.logout();
+
+    if (response?.success) {
+      isLogged.value = false; // atualiza estado
+      console.log("Logout bem-sucedido:", response.message);
+    } else {
+      console.warn("Falha ao realizar logout:", response?.message);
+    }
+  } catch (error) {
+    console.error("Erro no logout:", error);
+  }
 }
 
 // variável reativa que indica se está logado
