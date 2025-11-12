@@ -3,6 +3,7 @@ import { ref, defineProps, defineEmits } from 'vue'
 import { PresenterUsuario } from './Presenters/PresenterUsuario';
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 import MiranteSocialErrorToast from "./components/MiranteSocialErrorToast.vue";
+import { ElNotification } from 'element-plus';
 
 
 const props = defineProps({
@@ -14,12 +15,22 @@ async function VerifyCode(event: Event) {
   event.preventDefault();
   let presenter = new PresenterUsuario();
   let verified = await presenter.verifyEmailCode(props.email, code.value);
-  if(verified.success){
+  if(verified && verified.success){
     emit('close');
+    ElNotification({
+      title: 'Sucesso',
+      message: 'Email validado com sucesso!',
+      type: 'success'
+    })
   }
-  // else{
-  //   useErrorToast('Falha ao enviar email de validação')
-  // }
+  else{
+    ElNotification({
+      title: 'Erro',
+      message: 'Ocorreu um problema ao validar o email.',
+      type: 'error',
+      zIndex: 10000 
+    })
+  }
 }
 const code = ref('')
 </script>
