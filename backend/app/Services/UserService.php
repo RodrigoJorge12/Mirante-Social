@@ -58,7 +58,7 @@ class UserService
         if (!$user) {
             throw new Exception("Credenciais inválidas");
         }
-        Auth::guard('web')->login($user);
+        Auth::guard('web')->login($user, true);
         return $user;
     }
     public function verifyIfIsLogged(): array

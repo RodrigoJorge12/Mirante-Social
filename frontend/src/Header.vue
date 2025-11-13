@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 import { PresenterUsuario } from "./Presenters/PresenterUsuario"
+import { ArrowDown } from "@element-plus/icons-vue"; // ícone do Element Plus
 
 const router = useRouter();
 const presenter = new PresenterUsuario()
@@ -11,65 +12,78 @@ function goToLoginPage() {
   router.push("/login"); 
 }
 
-// função assíncrona para logout
 async function logout() {
   try {
     const response = await presenter.logout();
 
     if (response?.success) {
-      isLogged.value = false; // atualiza estado
-      console.log("Logout bem-sucedido:", response.message);
-    } else {
-      console.warn("Falha ao realizar logout:", response?.message);
+      isLogged.value = false;
+      user.value = null;
+      router.push("/login");
     }
-  } catch (error) {
-    console.error("Erro no logout:", error);
+  } catch (e) {
+    console.error("Erro no logout", e);
   }
 }
 
-// variável reativa que indica se está logado
 const isLogged = ref(false);
+const user = ref<string | null>(null);
 
-// verifica login quando o componente monta
 onMounted(async () => {
   try {
     const result = await presenter.verifyIfIsLogged();
     isLogged.value = !!(result && result.authenticated);
-    console.log("isLogged:", result);
+    user.value = result?.data?.name ?? null;
   } catch {
     isLogged.value = false;
   }
 });
 
+function handleCommand(cmd: string) {
+  if (cmd == "logout") {
+      logout();
+  }
+}
 </script>
 
 <template>
-    <header class="header">
-      <h2 class="title">Mirante Social</h2>
-      <ul class="list">
-        <li><a>Inicio</a></li>
-        <li><a>Mapa</a></li>
-        <li><a>Projetos</a></li>
-        <li><a>Cadastrar Projeto</a></li>
-        <li><a>Sobre</a></li>
-      </ul>
-      <MiranteSocialButton @click="isLogged ? logout() : goToLoginPage()">
-      {{ isLogged ? "Logout" : "Login" }}
+  <header class="header">
+    <h2 class="title">Mirante Social</h2>
+
+    <ul class="list">
+      <li><a>Inicio</a></li>
+      <li><a>Mapa</a></li>
+      <li><a>Projetos</a></li>
+      <li><a>Cadastrar Projeto</a></li>
+      <li><a>Sobre</a></li>
+    </ul>
+
+    <MiranteSocialButton v-if="!isLogged" @click="goToLoginPage">
+      Login
     </MiranteSocialButton>
-      <!-- <button  class="btnLogin">Login</button> -->
-    </header>
+
+    <el-dropdown v-else @command="handleCommand">
+      <span class="el-dropdown-link" style="cursor: pointer; font-weight: bold;">
+        {{ "Olá, " + user }}
+        <el-icon><arrow-down /></el-icon>
+      </span>
+
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item disabled>
+            Logado como {{ user }}
+          </el-dropdown-item>
+          <el-dropdown-item divided command="logout">
+            Sair
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+
+  </header>
 </template>
 
 <style scoped>
-.page {
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  margin: 0;
-  padding: 0;
-}
-
-/* Header fixo no topo e largura total */
 .header {
   display: flex;
   align-items: center;
@@ -78,23 +92,17 @@ onMounted(async () => {
   border-bottom: 1px solid #eee;
   padding: 1rem;
   width: 100%;
-  position: fixed; /* fixa no topo */
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
 }
-.title{
+
+.title {
   color: #10B981;
   font-weight: bold;
 }
 
-/* Corrige o conteúdo pra não ficar atrás do header */
-.content {
-  margin-top: 80px; /* altura aproximada do header */
-  text-align: center;
-}
-
-/* Lista sem pontos e com espaçamento horizontal */
 .list {
   display: flex;
   gap: 1rem;
@@ -102,9 +110,9 @@ onMounted(async () => {
   margin: 0;
   padding: 0;
 }
-.list li a{
+
+.list li a {
   font-weight: bold;
   color: black;
 }
-
 </style>
