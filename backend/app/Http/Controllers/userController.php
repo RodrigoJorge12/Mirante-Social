@@ -49,8 +49,6 @@ class UserController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Error creating user', ['error' => $e->getMessage()]);
-            
             return response()->json([
                 'success' => false,
                 'message' => 'Erro interno do servidor'
@@ -95,8 +93,6 @@ class UserController extends Controller
             return $response;
 
         } catch (\Exception $e) {
-            Log::error('Error logging user', ['error' => $e->getMessage()]);
-
             return response()->json([
                 'success' => false,
                 'message' => 'Erro interno do servidor',
@@ -117,7 +113,6 @@ class UserController extends Controller
             return response()->json($result, 200);
 
         } catch (\Exception $e) {
-            \Log::error('Erro ao verificar login', ['error' => $e->getMessage()]);
             return response()->json([
                 'authenticated' => false,
                 'message' => 'Erro interno do servidor'

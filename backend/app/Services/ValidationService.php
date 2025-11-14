@@ -40,9 +40,6 @@ class ValidationService
             'time' => now()->addMinutes(30),
             'created_at' => now()
         ];
-        Log::info('sending email', [
-            'data' => $validationData,
-        ]);
         return $this->validationRepository->create($validationData);
     }
     public function verifyCode($email, $code)

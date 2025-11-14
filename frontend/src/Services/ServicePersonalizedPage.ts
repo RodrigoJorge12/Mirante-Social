@@ -1,0 +1,25 @@
+export class ServicePersonalizedPage {
+    backendURL : string;
+    constructor(){
+        this.backendURL = import.meta.env.VITE_API_URL;
+    }
+    async getPageData( slug: string){
+        try {
+            const response = await fetch(this.backendURL + `/api/personalized-page/${slug}`, {
+                method : "GET",
+                credentials: "include",
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
+}

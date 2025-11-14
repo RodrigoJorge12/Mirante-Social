@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/HomePage.vue'
 import LoginPage from '@/LoginPage.vue'
 import CreateUserPage from '@/CreateUserPage.vue'
-
+import PersonalizedPage from '@/PersonalizedPage.vue'
 
 
 const router = createRouter({
@@ -31,6 +31,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: "/personalizedPages/:slug",
+      name: "personalized-page",
+      component: PersonalizedPage,
+    }
   ],
 })
 
