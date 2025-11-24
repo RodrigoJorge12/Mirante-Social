@@ -3,12 +3,27 @@ import { ref, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import { PresenterSocialProject } from "@/Presenters/PresenterSocialProject"; // AJUSTADO
+import EditSocialProject from "@/EditSocialProject.vue";
 
 const router = useRouter();
 const presenter = new PresenterSocialProject(); // AJUSTADO
 
 const loading = ref(true);
 const projects = ref<any[]>([]);
+
+const showModal = ref(false);
+const editId = ref<number | null>(null);
+
+function editProject(id: number) {
+  editId.value = id;
+  showModal.value = true;
+}
+
+const reloadProjects = async () => {
+  const response = await presenter.GetProjectsByLoggedUser();
+  projects.value = response.data;
+};
+
 
 const imageUrl = (path: string | null) => {
   if (!path) return null;
@@ -21,9 +36,6 @@ onMounted(async () => {
   loading.value = false;
 });
 
-function editProject(id: number) {
-  router.push(`/editar-projeto/${id}`);
-}
 
 async function deleteProject(id: number) {
   try {
@@ -51,6 +63,11 @@ async function deleteProject(id: number) {
 
 <template>
   <div class="page">
+    <EditSocialProject
+        v-model="showModal"
+        :project-id="editId"
+        @updated="reloadProjects"
+    />
 
     <!-- Loading -->
     <el-skeleton v-if="loading" animated :count="3" />

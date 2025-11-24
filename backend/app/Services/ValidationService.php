@@ -22,10 +22,6 @@ class ValidationService
                     ->subject($subject);
             });
         } catch (Exception $e) {
-            Log::error('Error sending email', [
-                'error' => $e->getMessage(),
-                'email' => $toEmail
-            ]);
             throw $e;
         }
     }

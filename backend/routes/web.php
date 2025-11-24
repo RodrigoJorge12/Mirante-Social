@@ -23,4 +23,6 @@ Route::middleware(['web'])->group(function () {
     Route::post('/api/logout', [UserController::class, 'logout']);
     Route::get('api/socialProjectsByLoggedUser', [SocialProjectController::class, 'getProjectsByLoggedUser']);
     Route::delete('api/socialProject/{id}', [SocialProjectController::class, 'deleteProject']);
+    Route::get('api/socialProject/{id}', [SocialProjectController::class, 'getProjectById']);
+    Route::put('api/socialProject/{id}', [SocialProjectController::class, 'updateProject']);
 });

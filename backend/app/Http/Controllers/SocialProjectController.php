@@ -52,8 +52,6 @@ class SocialProjectController extends Controller
             ]);
 
             if ($validator->fails()) {
-                log::error('Erro ao criar projeto social: ' . $validator->errors()->toJson());
-                log::error('Dados recebidos: ' . json_encode($input));
                 return response()->json([
                     'success' => false,
                     'message' => 'Dados inválidos',
@@ -73,7 +71,6 @@ class SocialProjectController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            log::error('Erro ao criar projeto social: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Erro interno do servidor'
@@ -131,6 +128,78 @@ class SocialProjectController extends Controller
                 'success' => false,
                 'message' => 'Erro interno do servidor'
             ], 500);
+        }
+    }
+    public function getProjectById(int $id): JsonResponse
+    {
+        try {
+            $projects = $this->socialProjectService->getProjectById($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Projeto social obtido com sucesso',
+                'data' => $projects
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
+    public function updateProject(Request $request, int $id): JsonResponse
+    {
+        try {
+            // Validate request data
+            $input = $request->all();
+
+            // Converte JSON string para array real
+            if (!empty($input['targetAudiences']) && is_string($input['targetAudiences'])) {
+                $input['targetAudiences'] = json_decode($input['targetAudiences'], true);
+            }
+
+            $validator = Validator::make($input, [
+                'name'             => 'required|string|max:255',
+                'description'      => 'required|string',
+                'address'          => 'nullable|string|max:255',
+                'district'         => 'nullable|string|max:255',
+                'city'             => 'nullable|string|max:255',
+                'state'            => 'nullable|string|size:2',
+                'zipCode'          => 'nullable|string|max:20',
+                'phone'            => 'nullable|string|max:30',
+                'websiteUrl'       => 'nullable|string|max:255',
+                'visualColor'      => 'nullable|string|max:20',
+                'activityArea'     => 'nullable|string|max:255',
+                'targetAudiences'  => 'nullable|array',
+                'targetAudiences.*'=> 'string',
+
+                'image'            => 'nullable|file|image|max:4096', // 4MB
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Dados inválidos',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Update project using service
+            $socialProject = $this->socialProjectService->updateSocialProject($id, $input, $request->file('image'));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Projeto Social atualizado com sucesso',
+                'data' => [
+                    'name'  => $socialProject->name,
+                ]                   
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([                
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);                                    
         }
     }
 }

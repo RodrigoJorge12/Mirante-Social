@@ -36,10 +36,6 @@ class UserService
 
             return $user;
         } catch (Exception $e) {
-            Log::error('Error creating user', [
-                'error' => $e->getMessage(),
-                'email' => $userData['email'] ?? 'unknown'
-            ]);
             throw $e;
         }
     }

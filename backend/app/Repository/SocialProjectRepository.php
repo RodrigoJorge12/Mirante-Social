@@ -8,4 +8,5 @@ interface SocialProjectRepository
     public function allProjects();
     public function projectsByUserId(int $userId);
     public function deleteProject(int $id);
+    public function updateProject(int $id, array $data);
 }

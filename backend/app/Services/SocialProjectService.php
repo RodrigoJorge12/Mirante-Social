@@ -64,6 +64,46 @@ class SocialProjectService
         }
         return $project;
     }
+    public function updateSocialProject(int $id, array $data, $image = null)
+    {
+        $project = $this->repository->findById($id);
+
+        if (!$project) {
+            throw new Exception("Projeto não encontrado.");
+        }
+
+        // Verifica se o projeto pertence ao usuário autenticado
+        if ($project->user_id !== auth()->id()) {
+            throw new Exception("Ação não autorizada.");
+        }
+
+        // Tratamento da imagem
+        if ($image) {
+            $path = $image->store('projectsImages', 'public');
+            $data['image_path'] = $path;
+        }
+
+        // Normalizar nomes de campos para o Banco
+        $normalized = [
+            'name'             => $data['name'],
+            'description'      => $data['description'],
+            'address'          => $data['address'] ?? null,
+            'district'         => $data['district'] ?? null,
+            'city'             => $data['city'] ?? null,
+            'state'            => $data['state'] ?? null,
+            'zip_code'         => $data['zipCode'] ?? null,
+            'phone'            => $data['phone'] ?? null,
+            'website_url'      => $data['websiteUrl'] ?? null,
+            'visual_color'     => $data['visualColor'] ?? null,
+            'activity_area'    => $data['activityArea'] ?? null,
+            'target_audiences' => json_encode($data['targetAudiences'] ?? []),
+            'image_path'       => $data['image_path'] ?? null,
+        ];
+
+        $project = $this->repository->updateProject($id, $normalized);
+
+        return $project;
+    }   
     public function getAllProjects()
     {
         return $this->repository->allProjects();
@@ -90,5 +130,20 @@ class SocialProjectService
         $deleted = $this->repository->deleteProject($id);
 
         return true;
+    }
+    public function getProjectById(int $id)
+    {
+        $project = $this->repository->findById($id);
+
+        if (!$project) {
+            throw new Exception("Projeto não encontrado.");
+        }
+
+        // Verifica se o projeto pertence ao usuário autenticado
+        if ($project->user_id !== auth()->id()) {
+            throw new Exception("Ação não autorizada.");
+        }
+
+        return $project;
     }
 }

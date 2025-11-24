@@ -34,4 +34,13 @@ class SocialProjectRepositoryInRD implements SocialProjectRepository
         }
         return false;
     }
+    public function updateProject(int $id, array $data)
+    {
+        $project = SocialProject::find($id);
+        if ($project) {
+            $project->update($data);
+            return $project;
+        }
+        return null;
+    }
 }
