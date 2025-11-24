@@ -10,4 +10,8 @@ class PersonalizedPageRepositoryInRD implements PersonalizedPageRepository
     {
         return PersonalizedPage::where('url', $slug)->first();
     }
+    public function create(array $data)
+    {
+        return PersonalizedPage::create($data);
+    }
 }

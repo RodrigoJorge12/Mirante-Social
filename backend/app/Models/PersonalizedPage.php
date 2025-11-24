@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class PersonalizedPage extends Model
 {
     use HasFactory;
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +16,9 @@ class PersonalizedPage extends Model
      */
     protected $fillable = [
         'social_project_id',
-        'caption'
+        'caption',
+        'url',
+        'template'
     ];
 
     /**

@@ -24,6 +24,8 @@ class SocialProjectController extends Controller
             // Validate request data
             $input = $request->all();
 
+            $input['wantsPersonalizedPage'] = filter_var($input['wantsPersonalizedPage'], FILTER_VALIDATE_BOOLEAN);
+
             // Converte JSON string para array real
             if (!empty($input['targetAudiences']) && is_string($input['targetAudiences'])) {
                 $input['targetAudiences'] = json_decode($input['targetAudiences'], true);
@@ -45,9 +47,13 @@ class SocialProjectController extends Controller
                 'targetAudiences.*'=> 'string',
 
                 'image'            => 'nullable|file|image|max:4096', // 4MB
+                'wantsPersonalizedPage' => 'nullable|boolean',
+                'selectedTemplate' => 'nullable|string|max:100',
             ]);
 
             if ($validator->fails()) {
+                log::error('Erro ao criar projeto social: ' . $validator->errors()->toJson());
+                log::error('Dados recebidos: ' . json_encode($input));
                 return response()->json([
                     'success' => false,
                     'message' => 'Dados inválidos',
@@ -67,6 +73,7 @@ class SocialProjectController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
+            log::error('Erro ao criar projeto social: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Erro interno do servidor'

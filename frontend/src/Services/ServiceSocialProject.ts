@@ -3,7 +3,7 @@ export class ServiceSocialProject {
     constructor(){
         this.backendURL = import.meta.env.VITE_API_URL;
     }
-    async CreateSocialProject( name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null){
+    async CreateSocialProject( name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null, wantsPersonalizedPage: boolean, selectedTemplate: string){
         try {
             const formData = new FormData()
 
@@ -19,6 +19,8 @@ export class ServiceSocialProject {
             formData.append("visualColor", visualColor)
             formData.append("activityArea", activityArea)
             formData.append("targetAudiences", JSON.stringify(targetAudiences))
+            formData.append("wantsPersonalizedPage", wantsPersonalizedPage ? "true" : "false")
+            formData.append("selectedTemplate", selectedTemplate)
 
             if (image) {
                 formData.append("image", image)

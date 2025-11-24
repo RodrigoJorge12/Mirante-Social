@@ -56,7 +56,13 @@ class SocialProjectService
         ];
 
         // Envia para o repositório
-        return $this->repository->create($normalized);
+        $project = $this->repository->create($normalized);
+
+        if($data['wantsPersonalizedPage']) {
+            // Cria página personalizada se solicitado
+            app(PersonalizedPageService::class)->createPersonalizedPage($project->id, $data['selectedTemplate']);
+        }
+        return $project;
     }
     public function getAllProjects()
     {

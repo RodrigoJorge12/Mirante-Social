@@ -55,4 +55,25 @@ class PersonalizedPageService
             ],
         ];
     }
+    public function createPersonalizedPage(int $socialProjectId, string $template): void
+    {
+        // Gerar slug único baseado no nome do projeto e um sufixo aleatório
+        $project = $this->socialProjectService->findById($socialProjectId);
+        $baseSlug = strtolower(preg_replace('/[^A-Za-z0-9-]+/', '-', $project->name));
+        $uniqueSuffix = substr(md5(uniqid(rand(), true)), 0, 6);
+        $slug = "{$baseSlug}-{$uniqueSuffix}";
+        $caption = "Conheça o projeto {$project->name}";
+
+        // Montar URL completa
+        $url = $slug;
+        $template = intval(str_replace("template", "", $template));// Extrai o número do template
+
+        // Criar a página personalizada no repositório
+        $this->personalizedPageRepository->create([
+            'social_project_id' => $socialProjectId,
+            'url' => $url,
+            'caption' => $caption,
+            'template' => $template,
+        ]);
+    }
 }

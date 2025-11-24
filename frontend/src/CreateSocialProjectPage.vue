@@ -7,6 +7,8 @@ import { PresenterSocialProject } from "./Presenters/PresenterSocialProject"
 
 
 const fileList = ref<any[]>([])
+const wantsPage = ref(false);
+const selectedTemplate = ref("");
 const handleExceed = () => {
   ElMessage.warning("Apenas uma imagem é permitida.")
 }
@@ -86,7 +88,7 @@ const sendDataCreateSocialProject = async () => {
 
     if (valid) {
         const presenter = new PresenterSocialProject();
-        const status = await presenter.CreateSocialProject(form.name, form.description, form.address, form.district, form.city, form.state, form.zipCode, form.phone, form.websiteUrl, form.visualColor, form.activityArea, form.targetAudiences, form.image);
+        const status = await presenter.CreateSocialProject(form.name, form.description, form.address, form.district, form.city, form.state, form.zipCode, form.phone, form.websiteUrl, form.visualColor, form.activityArea, form.targetAudiences, form.image, wantsPage.value, selectedTemplate.value);
         if (status && status.success){
           ElMessage.success("Projeto Social cadastrado com sucesso!");
           formRef.value.resetFields();
@@ -201,6 +203,19 @@ const sendDataCreateSocialProject = async () => {
           <el-option label="Adolescentes" value="Adolescentes" />
           <el-option label="Adultos" value="Adultos" />
           <el-option label="Idosos" value="Idosos" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Deseja página personalizada?">
+        <el-switch
+            v-model="wantsPage"
+            active-text="Sim"
+            inactive-text="Não"
+        />
+      </el-form-item>
+      <el-form-item label="Template" v-if="wantsPage">
+        <el-select v-model="selectedTemplate" placeholder="Selecione um template">
+            <el-option label="Template 1" value="template1" />
+            <el-option label="Template 2" value="template2" />
         </el-select>
       </el-form-item>
 
