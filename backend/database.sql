@@ -45,7 +45,8 @@ CREATE TABLE social_projects (
 
     status VARCHAR(50),
     activity_area VARCHAR(255),
-    target_audiences TEXT[],
+    target_audiences TEXT,
+    image_path VARCHAR(255),
 
     needs TEXT,
 

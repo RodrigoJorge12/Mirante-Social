@@ -44,6 +44,13 @@ function handleCommand(cmd: string) {
       logout();
   }
 }
+function goToCreateSocialProjectPage(){
+  if(!isLogged.value){
+    router.push("/login");
+  } else {
+    router.push("/createSocialProject");
+  }
+}
 </script>
 
 <template>
@@ -54,7 +61,7 @@ function handleCommand(cmd: string) {
       <li><a>Inicio</a></li>
       <li><a>Mapa</a></li>
       <li><a>Projetos</a></li>
-      <li><a>Cadastrar Projeto</a></li>
+      <li><a @click="goToCreateSocialProjectPage">Cadastrar Projeto</a></li>
       <li><a>Sobre</a></li>
     </ul>
 

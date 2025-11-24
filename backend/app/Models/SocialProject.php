@@ -31,6 +31,7 @@ class SocialProject extends Model
         'activity_area',
         'target_audiences',
         'needs',
+        'image_path',
         'created_at',
         'updated_at',
     ];

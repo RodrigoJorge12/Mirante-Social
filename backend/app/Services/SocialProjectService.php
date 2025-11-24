@@ -27,4 +27,35 @@ class SocialProjectService
 
         return $project;
     }
+    public function createSocialProject(array $data, $image = null)
+    {
+        // Tratamento da imagem
+        if ($image) {
+            $path = $image->store('projectsImages', 'public');
+            $data['image_path'] = $path;
+        }
+
+
+
+        // Normalizar nomes de campos para o Banco
+        $normalized = [
+            'user_id'          => auth()->id(),
+            'name'             => $data['name'],
+            'description'      => $data['description'],
+            'address'          => $data['address'] ?? null,
+            'district'         => $data['district'] ?? null,
+            'city'             => $data['city'] ?? null,
+            'state'            => $data['state'] ?? null,
+            'zip_code'         => $data['zipCode'] ?? null,
+            'phone'            => $data['phone'] ?? null,
+            'website_url'      => $data['websiteUrl'] ?? null,
+            'visual_color'     => $data['visualColor'] ?? null,
+            'activity_area'    => $data['activityArea'] ?? null,
+            'target_audiences' => json_encode($data['targetAudiences'] ?? []),
+            'image_path'       => $data['image_path'] ?? null,
+        ];
+
+        // Envia para o repositório
+        return $this->repository->create($normalized);
+    }
 }

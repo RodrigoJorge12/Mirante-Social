@@ -13,4 +13,9 @@ class SocialProjectRepositoryInRD implements SocialProjectRepository
     {
         return SocialProject::find($id);
     }
+
+    public function create(array $data)
+    {   
+        return SocialProject::create($data);
+    }
 }

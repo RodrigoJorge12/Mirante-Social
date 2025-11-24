@@ -51,7 +51,6 @@ class ValidationController extends Controller
                 ]
             ], 201);
         } catch (\Exception $e) {
-            Log::error('Error verifing email', ['error' => $e->getMessage()]);
 
             return response()->json([
                 'success' => false,

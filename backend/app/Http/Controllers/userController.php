@@ -129,7 +129,6 @@ class UserController extends Controller
                 'message' => 'Logout realizado com sucesso'
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('Erro ao fazer logout', ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
                 'message' => 'Erro interno do servidor'

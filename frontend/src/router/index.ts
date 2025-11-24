@@ -3,6 +3,7 @@ import HomePage from '@/HomePage.vue'
 import LoginPage from '@/LoginPage.vue'
 import CreateUserPage from '@/CreateUserPage.vue'
 import PersonalizedPage from '@/PersonalizedPage.vue'
+import CreateSocialProjectPage from '@/CreateSocialProjectPage.vue'
 
 
 const router = createRouter({
@@ -35,6 +36,11 @@ const router = createRouter({
       path: "/personalizedPages/:slug",
       name: "personalized-page",
       component: PersonalizedPage,
+    },
+    {
+      path: "/createSocialProject",
+      name: "createSocialProject",
+      component: CreateSocialProjectPage,
     }
   ],
 })
