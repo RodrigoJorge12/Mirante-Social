@@ -41,4 +41,58 @@ export class ServiceSocialProject {
             return;
         }
     }
+    async GetAllProjects(){
+        try {
+            const response = await fetch(this.backendURL + `/api/socialProjects`);
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
+    async GetProjectsByLoggedUser(){
+        try {
+            const response = await fetch(this.backendURL + `/api/socialProjectsByLoggedUser`, {
+                method : "GET",
+                credentials: "include",
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
+    async DeleteProject(id: number){
+        try {
+            const response = await fetch(this.backendURL + `/api/socialProject/${id}`, {
+                method : "DELETE",
+                credentials: "include",
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
 }

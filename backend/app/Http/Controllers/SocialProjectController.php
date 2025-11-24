@@ -73,5 +73,58 @@ class SocialProjectController extends Controller
             ], 500);
         }
     }
+    public function getAllProjects(): JsonResponse
+    {
+        try {
+            $projects = $this->socialProjectService->getAllProjects();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Projetos sociais obtidos com sucesso',
+                'data' => $projects
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
+    public function getProjectsByLoggedUser(): JsonResponse
+    {
+        try {
+            $projects = $this->socialProjectService->getProjectsByUserId();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Projetos sociais do usuário obtidos com sucesso',
+                'data' => $projects
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
+    public function deleteProject(int $id): JsonResponse
+    {
+        try {
+            $this->socialProjectService->deleteProject($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Projeto social deletado com sucesso'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
 }
 ?>

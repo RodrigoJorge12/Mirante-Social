@@ -18,4 +18,20 @@ class SocialProjectRepositoryInRD implements SocialProjectRepository
     {   
         return SocialProject::create($data);
     }
+    public function allProjects()
+    {
+        return SocialProject::all();
+    }
+    public function projectsByUserId(int $userId)
+    {
+        return SocialProject::where('user_id', $userId)->get();
+    }
+    public function deleteProject(int $id)
+    {
+        $project = SocialProject::find($id);
+        if ($project) {
+            return $project->delete();
+        }
+        return false;
+    }
 }

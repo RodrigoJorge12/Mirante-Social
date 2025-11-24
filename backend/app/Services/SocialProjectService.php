@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\SocialProject;
 use App\Repository\SocialProjectRepository;
 use Exception;
@@ -57,5 +57,32 @@ class SocialProjectService
 
         // Envia para o repositório
         return $this->repository->create($normalized);
+    }
+    public function getAllProjects()
+    {
+        return $this->repository->allProjects();
+    }
+    public function getProjectsByUserId()
+    {
+        $userId = auth()->id();
+        return $this->repository->projectsByUserId($userId);
+    }
+    public function deleteProject(int $id)
+    {
+        $project = $this->repository->findById($id);
+
+        if (!$project) {
+            throw new Exception("Projeto não encontrado.");
+        }
+
+        // Verifica se o projeto pertence ao usuário autenticado
+        if ($project->user_id !== auth()->id()) {
+            throw new Exception("Ação não autorizada.");
+        }
+
+        // Deleta o projeto
+        $deleted = $this->repository->deleteProject($id);
+
+        return true;
     }
 }

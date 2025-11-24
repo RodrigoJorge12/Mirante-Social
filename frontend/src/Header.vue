@@ -51,6 +51,13 @@ function goToCreateSocialProjectPage(){
     router.push("/createSocialProject");
   }
 }
+function goToMySocialProjectsPage(){
+  if(!isLogged.value){
+    router.push("/login");
+  } else {
+    router.push("/mySocialProjects");
+  }
+}
 </script>
 
 <template>
@@ -60,7 +67,7 @@ function goToCreateSocialProjectPage(){
     <ul class="list">
       <li><a>Inicio</a></li>
       <li><a>Mapa</a></li>
-      <li><a>Projetos</a></li>
+      <li><a @click="goToMySocialProjectsPage">Meus Projetos</a></li>
       <li><a @click="goToCreateSocialProjectPage">Cadastrar Projeto</a></li>
       <li><a>Sobre</a></li>
     </ul>

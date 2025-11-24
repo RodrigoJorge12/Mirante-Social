@@ -4,6 +4,7 @@ import LoginPage from '@/LoginPage.vue'
 import CreateUserPage from '@/CreateUserPage.vue'
 import PersonalizedPage from '@/PersonalizedPage.vue'
 import CreateSocialProjectPage from '@/CreateSocialProjectPage.vue'
+import ProjectsByUser from '@/ProjectsByUser.vue'
 
 
 const router = createRouter({
@@ -41,7 +42,12 @@ const router = createRouter({
       path: "/createSocialProject",
       name: "createSocialProject",
       component: CreateSocialProjectPage,
-    }
+    },
+    {
+      path: "/mySocialProjects",
+      name: "mySocialProjects",
+      component: ProjectsByUser,
+    },
   ],
 })
 
