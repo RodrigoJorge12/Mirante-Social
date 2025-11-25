@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import Header from "@/Header.vue";
 import { PresenterSocialProject } from "@/Presenters/PresenterSocialProject";
 
 const presenter = new PresenterSocialProject();
@@ -11,68 +10,56 @@ onMounted(async () => {
   projects.value = result.data ?? [];
 });
 
-const imageUrl = (path: string | null) => {
-  if (!path) return "";
-  return `${import.meta.env.VITE_API_URL}/storage/${path}`;
-};
+const imageUrl = (path: string | null) =>
+  path ? `${import.meta.env.VITE_API_URL}/storage/${path}` : "";
 </script>
 
 <template>
-  <Header />
-
-  <div class="page">
+  <div class="home-root">
 
     <el-carousel
-      height="520px"
+      v-if="projects.length"
+      height="650px"
+      type="card"
       indicator-position="outside"
-      arrow="always"
       autoplay
     >
       <el-carousel-item
         v-for="project in projects"
         :key="project.id"
+        class="item"
       >
-        <div class="carousel-center">
+        <el-card class="card" shadow="always">
 
-          <el-card class="card" shadow="hover" body-style="padding: 0">
-            
-            <el-image
-              :src="imageUrl(project.image_path)"
-              fit="cover"
-              class="img"
-            >
-              <template #error>
-                <div class="img-error">Imagem não disponível</div>
-              </template>
-            </el-image>
+          <!-- Imagem -->
+          <el-image
+            :src="imageUrl(project.image_path)"
+            fit="cover"
+            class="img"
+          />
 
-            <div class="content">
+          <!-- Conteúdo -->
+          <div class="content">
 
-              <h2 class="title">{{ project.name }}</h2>
+            <h2 class="title">{{ project.name }}</h2>
 
-              <!-- Descrição com scroll -->
-              <div class="scroll">
-                <p>{{ project.description }}</p>
-              </div>
-
-              <el-tag
-                v-if="project.activity_area"
-                type="success"
-                round
-                class="tag"
-              >
-                {{ project.activity_area }}
-              </el-tag>
-
-              <el-button type="primary" round class="btn">
-                Ver detalhes
-              </el-button>
-
+            <div class="scroll">
+              <p class="desc">
+                {{ project.description }}
+              </p>
             </div>
 
-          </el-card>
+            <el-tag type="success" class="tag">
+              {{ project.activity_area || "Área não informada" }}
+            </el-tag>
 
-        </div>
+            <el-button type="primary" class="btn">
+              Ver detalhes
+            </el-button>
+
+          </div>
+
+        </el-card>
       </el-carousel-item>
     </el-carousel>
 
@@ -80,71 +67,74 @@ const imageUrl = (path: string | null) => {
 </template>
 
 <style scoped>
-.page {
-  width: 100%;
-  padding: 10px;
+/* A raiz ocupa 100% da tela REAL */
+.home-root {
+  width: 100vw;
+  min-height: 100vh;
+  padding-top: 90px; /* espaço pro header fixo */
+  overflow-x: hidden;
 }
 
-/* Centraliza o card dentro do slide */
-.carousel-center {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-/* 🔥 Card gigante ocupando praticamente a tela toda */
-.card {
-  width: 92%;        /* ocupa quase a tela inteira */
-  max-width: 1500px; /* limite para monitores muito grandes */
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Imagem ocupa ~45% da altura */
-.img {
-  width: 100%;
-  height: 45%;
-  object-fit: cover;
-}
-
-.img-error {
-  width: 100%;
-  height: 45%;
-  background: #eee;
+/* O item do carrossel sempre centraliza */
+.item {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* CARD RESPONSIVO E GRANDE SEMPRE */
+.card {
+  width: 85vw;             /* ocupa 85% da tela */
+  max-width: 1400px;       /* limite em telas gigantes */
+  height: 90%;             /* quase toda a altura */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Imagem ocupa metade do card */
+.img {
+  width: 100%;
+  height: 45%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
 /* Conteúdo */
 .content {
   flex: 1;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  padding: 14px;
 }
 
 /* Título */
 .title {
-  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-/* Área scrollável */
+/* Scroll da descrição */
 .scroll {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+/* Texto */
+.desc {
+  line-height: 1.4;
+  color: #555;
 }
 
 /* Tag */
 .tag {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  width: max-content;
 }
 
 /* Botão */
 .btn {
-  width: fit-content;
+  width: max-content;
 }
 </style>
