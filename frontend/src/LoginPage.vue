@@ -40,7 +40,9 @@ const submitForm = async () => {
       const login = await presenter.login(form.email, form.password);
       if(login && login.success){
         ElMessage.success("Login realizado com sucesso!")
-        router.push("/home");
+        router.push("/").then(() => {
+          window.location.reload();
+        });
       }
       else{
         ElMessage.error("Credenciais inválidas. Tente novamente.")
