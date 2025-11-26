@@ -4,6 +4,7 @@ import { ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElMessage } from "elem
 import type { FormInstance, FormRules } from "element-plus"
 import MiranteSocialButton from "./components/MiranteSocialButton.vue"
 import { PresenterSocialProject } from "./Presenters/PresenterSocialProject"
+import router from "./router"
 
 
 const fileList = ref<any[]>([])
@@ -91,6 +92,7 @@ const sendDataCreateSocialProject = async () => {
         const status = await presenter.CreateSocialProject(form.name, form.description, form.address, form.district, form.city, form.state, form.zipCode, form.phone, form.websiteUrl, form.visualColor, form.activityArea, form.targetAudiences, form.image, wantsPage.value, selectedTemplate.value);
         if (status && status.success){
           ElMessage.success("Projeto Social cadastrado com sucesso!");
+          router.push("/");
           formRef.value.resetFields();
         } else {
           ElMessage.error("Erro ao cadastrar Projeto Social. Tente novamente.");

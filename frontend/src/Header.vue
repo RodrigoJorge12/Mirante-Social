@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 import { PresenterUsuario } from "./Presenters/PresenterUsuario"
 import { ArrowDown } from "@element-plus/icons-vue"; // ícone do Element Plus
+import { ElMessage } from "element-plus";
 
 const router = useRouter();
 const presenter = new PresenterUsuario()
@@ -11,7 +12,12 @@ const presenter = new PresenterUsuario()
 function goToLoginPage() {
   router.push("/login"); 
 }
-
+function goToInitialPage(){
+  router.push("/");
+} 
+function goToMapPage(){
+  ElMessage.info("Página de mapa em breve.");
+}
 async function logout() {
   try {
     const response = await presenter.logout();
@@ -65,8 +71,8 @@ function goToMySocialProjectsPage(){
     <h2 class="title">Mirante Social</h2>
 
     <ul class="list">
-      <li><a>Inicio</a></li>
-      <li><a>Mapa</a></li>
+      <li><a @click="goToInitialPage">Inicio</a></li>
+      <li><a @click="goToMapPage">Mapa</a></li>
       <li><a @click="goToMySocialProjectsPage">Meus Projetos</a></li>
       <li><a @click="goToCreateSocialProjectPage">Cadastrar Projeto</a></li>
       <li><a>Sobre</a></li>
