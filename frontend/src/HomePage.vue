@@ -58,18 +58,17 @@ const filteredProjects = computed(() => {
 
 <template>
   <div class="home-root">
-
-    <!-- 🔍 CAMPO DE BUSCA -->
+    <!-- Busca -->
     <div class="search-box">
       <el-input
         v-model="search"
-        placeholder="Buscar projetos por nome, descrição, área ou público-alvo..."
+        placeholder="Buscar projetos por nome, descrição, área, cidade..."
         size="large"
         clearable
       />
     </div>
 
-    <!-- CARROSSEL -->
+    <!-- Carrossel -->
     <el-carousel
       v-if="filteredProjects.length"
       height="650px"
@@ -82,47 +81,49 @@ const filteredProjects = computed(() => {
         :key="project.id"
         class="item"
       >
-        <el-card class="card" shadow="always">
+        <div class="slide-wrapper">
+          <el-card class="card" shadow="always">
+            <!-- Imagem com altura fixa -->
+            <el-image
+              :src="imageUrl(project.image_path)"
+              fit="cover"
+              class="img"
+            />
 
-          <!-- IMAGEM -->
-          <el-image
-            :src="imageUrl(project.image_path)"
-            fit="cover"
-            class="img"
-          />
+            <!-- Conteúdo -->
+            <div class="content-area">
+              <h2 class="title">{{ project.name }}</h2>
 
-          <!-- CONTEÚDO -->
-          <div class="content">
-            <h2 class="title">{{ project.name }}</h2>
+              <!-- SÓ a descrição tem scroll -->
+              <div class="desc-box">
+                <p class="desc">
+                  {{ project.description }}
+                </p>
+              </div>
 
-            <div class="scroll">
-              <p class="desc">{{ project.description }}</p>
+              <el-tag type="success" class="tag">
+                {{ project.activity_area || "Área não informada" }}
+              </el-tag>
+
+              <el-button type="primary" class="btn">
+                Ver detalhes
+              </el-button>
             </div>
-
-            <el-tag type="success" class="tag">
-              {{ project.activity_area || "Área não informada" }}
-            </el-tag>
-
-            <el-button type="primary" class="btn">
-              Ver detalhes
-            </el-button>
-          </div>
-
-        </el-card>
+          </el-card>
+        </div>
       </el-carousel-item>
     </el-carousel>
 
-    <!-- Caso não encontre nada -->
     <p v-else class="no-results">Nenhum projeto encontrado.</p>
-
   </div>
 </template>
+
 
 <style scoped>
 .home-root {
   width: 100vw;
   min-height: 100vh;
-  padding-top: 100px;
+  padding-top: 100px;        /* espaço pro header fixo */
   overflow-x: hidden;
 }
 
@@ -140,57 +141,71 @@ const filteredProjects = computed(() => {
   font-size: 18px;
 }
 
-/* Carrossel centralizado */
+/* Centraliza o item do carrossel */
 .item {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Card grande e responsivo */
-.card {
-  width: 85vw;
+/* Wrapper ocupa o slide inteiro */
+.slide-wrapper {
+  width: 90%;
   max-width: 1400px;
-  height: 90%;
+  height: 100%;           /* 100% dos 650px do carrossel */
+  display: flex;
+}
+
+/* Card ocupa tudo dentro do wrapper */
+.card {
+  flex: 1;
+  height: 100%;           /* ESSENCIAL pra % funcionar dentro */
   display: flex;
   flex-direction: column;
 }
 
-/* Imagem */
+/* Imagem com altura fixa em px (aqui não tem milagre) */
 .img {
   width: 100%;
-  height: 45%;
+  height: 260px;          /* sempre o mesmo tamanho */
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 6px 6px 0 0;
+  flex-shrink: 0;
 }
 
-/* Conteúdo */
-.content {
+/* Área de conteúdo ocupa o resto */
+.content-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 16px;
+  overflow: hidden;
 }
 
 .title {
-  font-size: 26px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 8px;
 }
 
-.scroll {
+/* Caixa da descrição – tem scroll se passar do espaço */
+.desc-box {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 12px;
+  padding-right: 4px;
+  max-height: 5em;        /* = ~2 linhas */
 }
 
+/* Texto da descrição */
 .desc {
-  color: #555;
   line-height: 1.4;
+  color: #555;
+  white-space: pre-wrap;
 }
 
+/* Tag e botão sempre visíveis embaixo */
 .tag {
   width: max-content;
-  margin-bottom: 12px;
+  margin: 10px 0;
 }
 
 .btn {

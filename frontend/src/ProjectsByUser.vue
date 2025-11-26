@@ -95,8 +95,8 @@ async function deleteProject(id: number) {
 
         <!-- Conteúdo com scroll -->
         <div class="scroll">
-          <p>{{ project.description }}</p>
-
+          <p class="description">{{ project.description }}</p>
+        </div>
           <el-tag
             size="small"
             type="info"
@@ -106,7 +106,7 @@ async function deleteProject(id: number) {
             {{ project.activity_area || "Área não informada" }}
           </el-tag>
 
-        </div>
+        
 
         <!-- Botões -->
         <div class="actions">
@@ -128,7 +128,9 @@ async function deleteProject(id: number) {
 .page {
   padding: 20px;
 }
-
+.description{
+    max-height: 5em;
+}
 /* CONTÊINER FLEX — resolve o problema dos cards apertados */
 .cards-container {
   display: flex;
