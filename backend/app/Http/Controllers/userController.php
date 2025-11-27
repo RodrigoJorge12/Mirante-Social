@@ -135,5 +135,71 @@ class UserController extends Controller
             ], 500);
         }
     }
+    public function sendPasswordResetEmail(Request $request): JsonResponse
+    {
+        try {
+            // Validate request data
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email|exists:users,email',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Dados inválidos',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $this->userService->sendPasswordResetEmail($validator->validated()['email']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Email de recuperação de senha enviado com sucesso'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
+    public function resetPassword(Request $request): JsonResponse
+    {
+        try {
+            // Validate request data
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email|exists:users,email',
+                'code' => 'required|string|min:6|max:6',
+                'password' => 'required|string|min:6',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Dados inválidos',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $this->userService->resetPassword(
+                $validator->validated()['email'],
+                $validator->validated()['code'],
+                $validator->validated()['password']
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Senha resetada com sucesso'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
 }
 ?>

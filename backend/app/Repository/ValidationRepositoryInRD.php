@@ -11,12 +11,13 @@ class ValidationRepositoryInRD implements ValidationRepository
     {
         return Validation::create($validation);
     }
-    public function findByEmailAndCode($email, $code)
+    public function findByEmailAndCode($email, $code, $type = 'email_validation')
     {
         return Validation::whereIn('user_id', function ($query) use ($email) {
             $query->select('id')->from('users')->where('email', $email);
         })
             ->where('code', $code)
+            ->where('type', $type)
             ->where('time', '>', now())
             ->first();
     }

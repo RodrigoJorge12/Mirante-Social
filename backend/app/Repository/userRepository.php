@@ -8,4 +8,5 @@ interface UserRepository
     function findByEmail($email);
     function validateUserByEmail($email);
     function validateUserCredentials($email, $password);
+    function updatePassword($id, $newPassword);
 }

@@ -81,5 +81,31 @@ class UserService
     {
         Auth::guard('web')->logout();
     }
+    public function sendPasswordResetEmail($email)
+    {
+        $user = $this->userRepository->findByEmail($email);
+        if (!$user) {
+            throw new Exception("Usuário não encontrado");
+        }
+        $validation = $this->validationService->createValidation($user, 'password_reset');
+        $this->validationService->sendEmail(
+            $user->email,
+            $user->name,
+            "Olá {$user->name}, você solicitou a recuperação de senha. O seu código de validação é {$validation->code}. Ele é válido por apenas 30 minutos.",
+            "Recuperação de Senha - Mirante Social"
+        );
+    }
+    public function resetPassword($email, $code, $newPassword)
+    {
+        $validation = $this->validationService->verifyCode($email, $code, 'password_reset');
+        if (!$validation) {
+            throw new Exception("Código inválido ou expirado");
+        }
+        $user = $this->userRepository->findByEmail($email);
+        if (!$user) {
+            throw new Exception("Usuário não encontrado");
+        }
+        $this->userRepository->updatePassword($user->id, $newPassword);
+    }
     
 }

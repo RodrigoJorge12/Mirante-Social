@@ -5,6 +5,7 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from "element-plus"
 import type { FormInstance, FormRules } from "element-plus"
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 import { PresenterUsuario } from "./Presenters/PresenterUsuario"
+import ForgotPasswordModal from "./ForgotPasswordModal.vue";
 
 interface LoginForm {
   email: string
@@ -53,8 +54,9 @@ const submitForm = async () => {
   }
 }
 
+const forgotDialogVisible = ref(false);
 function goToForgotPassword() {
-  ElMessage.info("Funcionalidade de recuperação de senha em breve.")
+  forgotDialogVisible.value = true;
 }
 
 function goToCreateUserPage() {
@@ -90,6 +92,7 @@ function goToCreateUserPage() {
         <span class="link" @click="goToForgotPassword">Esqueci minha senha</span>
         <span class="link" @click="goToCreateUserPage">Cadastre-se</span>
       </div>
+      <ForgotPasswordModal v-model="forgotDialogVisible" />
 
       <el-form-item>
         <MiranteSocialButton type="primary" class="login-button" @click="submitForm">

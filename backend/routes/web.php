@@ -14,6 +14,8 @@ Route::post('/users', [UserController::class, 'create']);
 Route::post('/verifyEmail', [ValidationController::class, 'verifyCode']);
 Route::get('/personalized-page/{slug}', [PersonalizedPageController::class, 'getPersonalizedPage']);
 Route::get('/socialProjects', [SocialProjectController::class, 'getAllProjects']);
+Route::post('sendPasswordResetEmail', [UserController::class, 'sendPasswordResetEmail']);
+Route::post('resetPassword', [UserController::class, 'resetPassword']);
 
 // ⚙️ Rotas que precisam gravar e ler sessão — força o middleware 'web'
 Route::middleware(['web'])->group(function () {

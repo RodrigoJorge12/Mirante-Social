@@ -27,4 +27,10 @@ export class PresenterUsuario{
     async logout(){
         return this.service.logout();
     }
+    async sendPasswordResetEmail(email: string){
+        return this.service.sendPasswordResetEmail(email);
+    }
+    async resetPassword(email: string, code: string, newPassword: string){  
+        return this.service.resetPassword(email, code, newPassword);
+    }
 }

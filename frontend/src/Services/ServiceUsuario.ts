@@ -123,4 +123,54 @@ export class ServiceUsuario{
             return;
         }
     }
+    async sendPasswordResetEmail(email: string){
+        try {
+            const response = await fetch(this.backendURL + "/api/sendPasswordResetEmail", {
+                method : "POST",
+                headers : {
+                    "Content-Type": "application/json"
+                },
+                body : JSON.stringify({
+                    email : email
+                })
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
+    async resetPassword(email: string, code: string, password: string){  
+        try {
+            const response = await fetch(this.backendURL + "/api/resetPassword", {
+                method : "POST",
+                headers : {
+                    "Content-Type": "application/json"
+                },
+                body : JSON.stringify({
+                    email : email,
+                    code : code,
+                    password : password
+                })
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
 }

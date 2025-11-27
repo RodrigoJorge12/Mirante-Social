@@ -30,4 +30,9 @@ class UserRepositoryInRD implements UserRepository
         }
         return null;
     }
+    public function updatePassword($id, $newPassword)
+    {
+        return User::where('id', $id)
+            ->update(['password' => bcrypt($newPassword)]);
+    }   
 }

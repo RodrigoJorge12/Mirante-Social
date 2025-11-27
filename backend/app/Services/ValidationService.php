@@ -26,11 +26,11 @@ class ValidationService
         }
     }
 
-    public function createValidation($user)
+    public function createValidation($user, $type = 'email_validation')
     {
         $code = random_int(100000, 999999);
         $validationData = [
-            'type' => 'email_validation',
+            'type' => $type,
             'user_id' => $user->id,
             'code' => $code,
             'time' => now()->addMinutes(30),
@@ -38,9 +38,9 @@ class ValidationService
         ];
         return $this->validationRepository->create($validationData);
     }
-    public function verifyCode($email, $code)
+    public function verifyCode($email, $code, $type = 'email_validation')
     {
-        $validation = $this->validationRepository->findByEmailAndCode($email, $code);
+        $validation = $this->validationRepository->findByEmailAndCode($email, $code, $type);
         if (!$validation) {
             throw new Exception("Código inválido ou expirado");
         }
