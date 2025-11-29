@@ -42,4 +42,28 @@ class PersonalizedPageController extends Controller
             ], 500);
         }
     }
+    public function getSlugByProjectId(int $projectId): JsonResponse
+    {
+        try {
+            $page = $this->personalizedPageService->getSlugByProjectId($projectId);
+            if (!$page) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Página personalizada não encontrada para o projeto fornecido'
+                ], 404);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Slug da página personalizada obtido com sucesso',
+                'data' => [
+                    'slug' => $page->url
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
 }

@@ -22,4 +22,23 @@ export class ServicePersonalizedPage {
             return;
         }
     }
+    async getSlugByProjectId(projectId: number){
+        try {
+            const response = await fetch(this.backendURL + `/api/personalized-page/slug-by-project/${projectId}`, {
+                method : "GET",
+                credentials: "include",
+            });
+            if(!response.ok){
+                return;
+            }
+            const valid = await response.json();
+            if(valid){
+                return valid.data.slug;
+            }
+            return false;
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
 }

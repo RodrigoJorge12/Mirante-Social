@@ -16,7 +16,7 @@ Route::get('/personalized-page/{slug}', [PersonalizedPageController::class, 'get
 Route::get('/socialProjects', [SocialProjectController::class, 'getAllProjects']);
 Route::post('sendPasswordResetEmail', [UserController::class, 'sendPasswordResetEmail']);
 Route::post('resetPassword', [UserController::class, 'resetPassword']);
-
+Route::get('personalized-page/slug-by-project/{projectId}', [PersonalizedPageController::class, 'getSlugByProjectId']);
 // ⚙️ Rotas que precisam gravar e ler sessão — força o middleware 'web'
 Route::middleware(['web'])->group(function () {
     Route::post('/api/socialProject', [SocialProjectController::class, 'create']);

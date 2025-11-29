@@ -76,4 +76,8 @@ class PersonalizedPageService
             'template' => $template,
         ]);
     }
+    public function getSlugByProjectId(int $projectId)
+    {
+        return $this->personalizedPageRepository->findByProjectId($projectId);
+    }
 }
