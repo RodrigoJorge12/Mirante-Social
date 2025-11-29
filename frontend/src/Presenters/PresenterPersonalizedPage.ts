@@ -6,4 +6,10 @@ export class PresenterPersonalizedPage {
   async getPageData(slug: string) {
     return await this.service.getPageData(slug);
   }
+  async getUrlByProjectId(projectId: number) {
+    const slug = await this.service.getSlugByProjectId(projectId);
+    const baseUrl = window.location.origin;
+    const URL = baseUrl + `/personalizedPages/${slug}`;
+    return URL
+  }
 }

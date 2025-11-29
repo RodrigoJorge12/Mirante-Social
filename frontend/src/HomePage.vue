@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { PresenterSocialProject } from "@/Presenters/PresenterSocialProject";
+import ProjectDetailsModal from "@/ProjectDetailsModal.vue";
+import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 
 const presenter = new PresenterSocialProject();
 const projects = ref<any[]>([]);
@@ -54,6 +56,15 @@ const filteredProjects = computed(() => {
     );
   });
 });
+
+//modal de detalhes
+const detailsVisible = ref(false);
+const selectedProject = ref<any | null>(null);
+
+function openDetails(project: any) {
+  selectedProject.value = project;
+  detailsVisible.value = true;
+}
 </script>
 
 <template>
@@ -104,10 +115,13 @@ const filteredProjects = computed(() => {
               <el-tag type="success" class="tag">
                 {{ project.activity_area || "Área não informada" }}
               </el-tag>
-
-              <el-button type="primary" class="btn">
+              <MiranteSocialButton
+                type="primary"
+                class="btn"
+                @click="openDetails(project)"
+              >
                 Ver detalhes
-              </el-button>
+              </MiranteSocialButton>
             </div>
           </el-card>
         </div>
@@ -116,6 +130,10 @@ const filteredProjects = computed(() => {
 
     <p v-else class="no-results">Nenhum projeto encontrado.</p>
   </div>
+  <ProjectDetailsModal
+    v-model="detailsVisible"
+    :project="selectedProject"
+  />
 </template>
 
 

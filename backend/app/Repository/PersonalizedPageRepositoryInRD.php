@@ -14,4 +14,8 @@ class PersonalizedPageRepositoryInRD implements PersonalizedPageRepository
     {
         return PersonalizedPage::create($data);
     }
+    public function findByProjectId(int $projectId)
+    {
+        return PersonalizedPage::where('social_project_id', $projectId)->first();
+    }
 }
