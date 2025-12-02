@@ -7,7 +7,10 @@ use App\Http\Controllers\SocialProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+        return response()->json([
+        'success' => true,
+        'message' => 'API Mirante Social rodando 🚀'
+    ]);
 });
 
 Route::post('/users', [UserController::class, 'create']);

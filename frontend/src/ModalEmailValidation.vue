@@ -2,7 +2,6 @@
 import { ref, defineProps, defineEmits } from 'vue'
 import { PresenterUsuario } from './Presenters/PresenterUsuario';
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
-import MiranteSocialErrorToast from "./components/MiranteSocialErrorToast.vue";
 import { ElNotification } from 'element-plus';
 
 

@@ -12,7 +12,7 @@ class CorsMiddleware
     {
         // 🔥 define aqui antes de tudo
         $headers = [
-            'Access-Control-Allow-Origin' => 'http://127.0.0.1:5173',
+            'Access-Control-Allow-Origin' => 'https://frontend-cool-wildflower-2471.fly.dev',
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
             'Access-Control-Allow-Credentials' => 'true',
