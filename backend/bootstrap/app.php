@@ -4,12 +4,13 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CorsMiddleware;
+use App\Http\Middleware\EncryptCookies;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         // Mantém as rotas como você quis
         web: __DIR__ . '/../routes/web.php',
-        api: __DIR__ . '/../routes/web.php',
+        // api: __DIR__ . '/../routes/web.php',
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // ✅ ESSENCIAL: garante o funcionamento de sessões e autenticação
         $middleware->group('web', [
+            EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
