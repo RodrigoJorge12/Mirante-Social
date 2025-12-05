@@ -1,10 +1,8 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
@@ -15,4 +13,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+
+  // 🔥 BASE CORRETA
+  // O site raiz já aponta para public/
+  base: '/',
+
+  // 🔥 GARANTE QUE O DIST GERE OS ARQUIVOS BONITOS
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+  }
 })
