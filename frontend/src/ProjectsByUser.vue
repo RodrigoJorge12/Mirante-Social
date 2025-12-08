@@ -25,10 +25,6 @@ const reloadProjects = async () => {
 };
 
 
-const imageUrl = (path: string | null) => {
-  if (!path) return null;
-  return `${import.meta.env.VITE_API_URL}/storage/${path}`;
-};
 
 onMounted(async () => {
   const response = await presenter.GetProjectsByLoggedUser(); // AJUSTADO
@@ -83,8 +79,8 @@ async function deleteProject(id: number) {
       >
         <!-- Imagem -->
         <img
-          v-if="imageUrl(project.image_path)"
-          :src="imageUrl(project.image_path) as string"
+          v-if="project.image"
+          :src="project.image"
           class="image"
         />
 

@@ -13,9 +13,6 @@ onMounted(async () => {
   projects.value = result.data ?? [];
 });
 
-// Monta URL da imagem
-const imageUrl = (path: string | null) =>
-  path ? `${import.meta.env.VITE_API_URL}/storage/${path}` : "";
 
 // 🔥 FILTRO PRINCIPAL
 const filteredProjects = computed(() => {
@@ -96,7 +93,7 @@ function openDetails(project: any) {
           <el-card class="card" shadow="always">
             <!-- Imagem com altura fixa -->
             <el-image
-              :src="imageUrl(project.image_path)"
+              :src="project.image"
               fit="cover"
               class="img"
             />

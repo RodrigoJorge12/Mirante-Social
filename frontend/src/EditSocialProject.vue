@@ -42,11 +42,18 @@ const form = reactive({
   activityArea: "",
   targetAudiences: [] as string[],
   image: null as File | null,
-  image_path: null as string | null
+  image_path: null as string | null,
+  image_base64: null as string | null,
 });
 
 const fileList = ref<any[]>([]);
-
+watch(isOpen, (v) => {
+  if (!v) {
+    fileList.value = [];
+    form.image = null;
+    form.image_base64 = null;
+  }
+});
 // Busca os dados do projeto quando abrir
 watch(
   () => props.projectId,
@@ -74,13 +81,20 @@ watch(
     form.activityArea = p.activity_area;
     form.targetAudiences = JSON.parse(p.target_audiences ?? "[]");
     form.image_path = p.image_path;
+    (form as any).image_base64 = p.image;
+    console.log("IMAGEM BASE64: " + form.image_base64);
+    console.log("IMAGEM PATH: " + form.image_path);
+
+
 
     // Para exibir a imagem atual no preview
-    if (p.image_path) {
+    if (p.image) {
       fileList.value = [
         {
-          name: "imagem atual",
-          url: `${import.meta.env.VITE_API_URL}/storage/${p.image_path}`
+            name: "imagem atual",
+            url: p.image,      // ✅ base64
+            status: "success", // ✅ obrigatório
+            uid: Date.now() 
         }
       ];
     }
@@ -100,6 +114,11 @@ const submit = async () => {
 
   const valid = await formRef.value.validate();
   if (!valid) return;
+  if (!form.image && form.image_base64) {
+    const res = await fetch(form.image_base64);
+    const blob = await res.blob();
+    form.image = new File([blob], "imagem_atual.jpg", { type: blob.type });
+    }
 
   const result = await presenter.UpdateSocialProject(
     props.projectId,
@@ -117,6 +136,7 @@ const submit = async () => {
     form.targetAudiences,
     form.image
   );
+  console.log("IMAGEM AQUI" + form.image);
     // const result = true;
 
   if (result){//result?.success) {

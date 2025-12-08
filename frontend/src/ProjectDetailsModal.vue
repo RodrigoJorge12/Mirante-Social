@@ -11,10 +11,6 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-// Montagem da imagem
-const imageUrl = (path: string | null) =>
-  path ? `${import.meta.env.VITE_API_URL}/storage/${path}` : "";
-
 // Fechar modal
 function closeModal() {
   emit("update:modelValue", false);
@@ -70,7 +66,7 @@ watch(
       
       <!-- IMAGEM -->
       <el-image
-        :src="imageUrl(project.image_path)"
+        :src="project.image"
         fit="cover"
         style="width: 100%; height: 260px; border-radius: 6px; margin-bottom: 15px"
       />

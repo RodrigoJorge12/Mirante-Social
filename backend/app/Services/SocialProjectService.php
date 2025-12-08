@@ -4,6 +4,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SocialProject;
 use App\Repository\SocialProjectRepository;
+use Illuminate\Support\Facades\File;
 use Exception;
 
 class SocialProjectService
@@ -106,12 +107,59 @@ class SocialProjectService
     }   
     public function getAllProjects()
     {
-        return $this->repository->allProjects();
+        $projects = $this->repository->allProjects();
+
+        foreach ($projects as $project) {
+
+            if ($project->image_path) {
+
+                $fullPath = public_path('storage/' . $project->image_path);
+
+                if (File::exists($fullPath)) {
+                    $file = File::get($fullPath);
+                    $mime = mime_content_type($fullPath);
+
+                    $project->image = 'data:' . $mime . ';base64,' . base64_encode($file);
+                } else {
+                    $project->image = null;
+                }
+
+            } else {
+                $project->image = null;
+            }
+
+            unset($project->image_path);
+        }
+
+        return $projects;
     }
     public function getProjectsByUserId()
     {
         $userId = auth()->id();
-        return $this->repository->projectsByUserId($userId);
+        $projects = $this->repository->projectsByUserId($userId);
+        foreach ($projects as $project) {
+
+            if ($project->image_path) {
+
+                $fullPath = public_path('storage/' . $project->image_path);
+
+                if (File::exists($fullPath)) {
+                    $file = File::get($fullPath);
+                    $mime = mime_content_type($fullPath);
+
+                    $project->image = 'data:' . $mime . ';base64,' . base64_encode($file);
+                } else {
+                    $project->image = null;
+                }
+
+            } else {
+                $project->image = null;
+            }
+
+            unset($project->image_path);
+        }
+
+        return $projects;
     }
     public function deleteProject(int $id)
     {
@@ -143,6 +191,25 @@ class SocialProjectService
         if ($project->user_id !== auth()->id()) {
             throw new Exception("Ação não autorizada.");
         }
+
+        if ($project->image_path) {
+
+            $fullPath = public_path('storage/' . $project->image_path);
+
+            if (File::exists($fullPath)) {
+                $file = File::get($fullPath);
+                $mime = mime_content_type($fullPath);
+
+                $project->image = 'data:' . $mime . ';base64,' . base64_encode($file);
+            } else {
+                $project->image = null;
+            }
+
+        } else {
+            $project->image = null;
+        }
+
+        unset($project->image_path);
 
         return $project;
     }
