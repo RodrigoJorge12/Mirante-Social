@@ -28,7 +28,10 @@ export class ServiceSocialProject {
             const response = await fetch(this.backendURL + `/api/socialProject`, {
                 method : "POST",
                 credentials: "include",
-                body : formData
+                body : formData,
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                }
             });
             if(!response.ok){
                 return;
@@ -45,7 +48,11 @@ export class ServiceSocialProject {
     }
     async GetAllProjects(){
         try {
-            const response = await fetch(this.backendURL + `/api/socialProjects`);
+            const response = await fetch(this.backendURL + `/api/socialProjects`, {    
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                },
+            });
             if(!response.ok){
                 return;
             }
@@ -64,6 +71,9 @@ export class ServiceSocialProject {
             const response = await fetch(this.backendURL + `/api/socialProjectsByLoggedUser`, {
                 method : "GET",
                 credentials: "include",
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                }
             });
             if(!response.ok){
                 return;
@@ -83,6 +93,9 @@ export class ServiceSocialProject {
             const response = await fetch(this.backendURL + `/api/socialProject/${id}`, {
                 method : "DELETE",
                 credentials: "include",
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                }
             });
             if(!response.ok){
                 return;
@@ -102,6 +115,9 @@ export class ServiceSocialProject {
             const response = await fetch(this.backendURL + `/api/socialProject/${id}`, {
                 method : "GET",
                 credentials: "include",
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                }
             });
             if(!response.ok){
                 return;
@@ -140,7 +156,10 @@ export class ServiceSocialProject {
             const response = await fetch(this.backendURL + `/api/socialProject/${id}`, {
                 method : "POST",
                 credentials: "include",
-                body : formData
+                body : formData,
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                }
             });
             if(!response.ok){
                 return;

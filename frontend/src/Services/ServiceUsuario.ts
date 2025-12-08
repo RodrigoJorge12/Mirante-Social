@@ -8,14 +8,15 @@ export class ServiceUsuario{
             const response = await fetch(this.backendURL + "/api/users", {
                 method : "POST",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
                 },
                 // credentials: "include",
                 body : JSON.stringify({
                     name : nome,
                     email : email,
                     password : senha
-                })
+                }),
             });
             if(!response.ok){
                 return;
@@ -35,7 +36,8 @@ export class ServiceUsuario{
             const response = await fetch(this.backendURL + "/api/verifyEmail", {
                 method : "POST",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
                 },
                 // credentials: "include",
                 body : JSON.stringify({
@@ -61,7 +63,8 @@ export class ServiceUsuario{
             const response = await fetch(this.backendURL + "/api/login", {
                 method : "POST",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
                 },
                 credentials: "include",
                 body : JSON.stringify({
@@ -87,7 +90,8 @@ export class ServiceUsuario{
             const response = await fetch(this.backendURL + "/api/verifyIfIsLogged", {
                 method : "GET",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
                 },
                 credentials: "include",
             });
@@ -109,7 +113,8 @@ export class ServiceUsuario{
             const response = await fetch(this.backendURL + "/api/logout", {
                 method : "POST",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
                 },
                 credentials: "include",
             });
@@ -128,7 +133,8 @@ export class ServiceUsuario{
             const response = await fetch(this.backendURL + "/api/sendPasswordResetEmail", {
                 method : "POST",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
                 },
                 body : JSON.stringify({
                     email : email
@@ -152,7 +158,8 @@ export class ServiceUsuario{
             const response = await fetch(this.backendURL + "/api/resetPassword", {
                 method : "POST",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
                 },
                 body : JSON.stringify({
                     email : email,

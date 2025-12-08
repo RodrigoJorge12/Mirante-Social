@@ -8,6 +8,9 @@ export class ServicePersonalizedPage {
             const response = await fetch(this.backendURL + `/api/personalized-page/${slug}`, {
                 method : "GET",
                 credentials: "include",
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                }
             });
             if(!response.ok){
                 return;
@@ -27,6 +30,9 @@ export class ServicePersonalizedPage {
             const response = await fetch(this.backendURL + `/api/personalized-page/slug-by-project/${projectId}`, {
                 method : "GET",
                 credentials: "include",
+                headers: {
+                    "X-App-Key": import.meta.env.VITE_APP_TOKEN
+                }
             });
             if(!response.ok){
                 return;
