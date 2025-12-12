@@ -4,6 +4,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\PersonalizedPageController;
 use App\Http\Controllers\SocialProjectController;
+use App\Http\Controllers\ReportController;
+use App\Http\Middleware\ModeratorMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,4 +27,12 @@ Route::middleware(['api'])->group(function () {
     Route::get('/socialProject/{id}', [SocialProjectController::class, 'getProjectById']);
     Route::put('/socialProject/{id}', [SocialProjectController::class, 'updateProject']);
     Route::post('/socialProject', [SocialProjectController::class, 'create']);
+
+    Route::post('/reports', [ReportController::class, 'create']);
+    Route::get('/reports/mine', [ReportController::class, 'mine']);
+});
+
+Route::middleware(['api'])->group(function () {
+    Route::get('/reports/pending', [ReportController::class, 'pending'])->middleware(ModeratorMiddleware::class);
+    Route::put('/reports/{id}/resolve', [ReportController::class, 'resolve'])->middleware(ModeratorMiddleware::class);
 });

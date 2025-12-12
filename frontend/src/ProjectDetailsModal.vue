@@ -3,6 +3,7 @@ import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 import { defineProps, defineEmits, computed, ref, watch } from "vue";
 import { ElMessage } from "element-plus";
 import { PresenterPersonalizedPage } from "./Presenters/PresenterPersonalizedPage";
+import { PresenterReport } from "./Presenters/PresenterReport";
 
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
@@ -34,6 +35,37 @@ function comingSoon() {
   ElMessage.info("Funcionalidade de mapa será implementada em breve!");
 }
 const personalizedPageUrl = ref<string | null>(null);
+const reportModalVisible = ref(false);
+const reportCategory = ref<string>("");
+const reportReason = ref<string>("");
+const reportSubmitting = ref(false);
+const categories = [
+  { value: "spam", label: "Spam" },
+  { value: "fraude", label: "Fraude" },
+  { value: "discurso_de_odio", label: "Discurso de ódio" },
+  { value: "violencia", label: "Violência" },
+  { value: "enganoso", label: "Enganoso" },
+  { value: "outro", label: "Outro" },
+];
+async function submitReport() {
+  if (!props.project) return;
+  if (!reportCategory.value || !reportReason.value || reportReason.value.length < 10) {
+    ElMessage.error("Informe categoria e motivo (mín. 10 caracteres)");
+    return;
+  }
+  reportSubmitting.value = true;
+  const presenter = new PresenterReport();
+  const ok = await presenter.createReport(props.project.id, reportCategory.value, reportReason.value);
+  reportSubmitting.value = false;
+  if (ok) {
+    ElMessage.success("Denúncia enviada");
+    reportModalVisible.value = false;
+    reportCategory.value = "";
+    reportReason.value = "";
+  } else {
+    ElMessage.error("Não foi possível enviar a denúncia");
+  }
+}
 // buscar pagina personalizada
 watch(
   () => props.project,
@@ -147,7 +179,29 @@ watch(
     </div>
 
     <template #footer>
+      <MiranteSocialButton style="margin-right:8px;" @click="() => (reportModalVisible = true)">Denunciar</MiranteSocialButton>
       <MiranteSocialButton @click="closeModal">Fechar</MiranteSocialButton>
+    </template>
+  </el-dialog>
+
+  <el-dialog :model-value="reportModalVisible" width="500px" @close="() => (reportModalVisible = false)" center>
+    <template #header>
+      <h3 style="margin:0;">Denunciar projeto</h3>
+    </template>
+    <div>
+      <el-form label-position="top">
+        <el-form-item label="Categoria">
+          <el-select v-model="reportCategory" placeholder="Selecione">
+            <el-option v-for="c in categories" :key="c.value" :label="c.label" :value="c.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Motivo">
+          <el-input type="textarea" v-model="reportReason" :rows="4" maxlength="1000" show-word-limit />
+        </el-form-item>
+      </el-form>
+    </div>
+    <template #footer>
+      <MiranteSocialButton :disabled="reportSubmitting" @click="submitReport">Enviar denúncia</MiranteSocialButton>
     </template>
   </el-dialog>
 </template>

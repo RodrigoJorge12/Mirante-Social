@@ -26,7 +26,7 @@ class SocialProject extends Model
         'visual_color',
         'verified',
         'verified_at',
-        'seal',
+        'badge',
         'status',
         'activity_area',
         'target_audiences',
