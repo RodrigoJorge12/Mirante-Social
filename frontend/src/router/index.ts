@@ -5,6 +5,8 @@ import CreateUserPage from '@/CreateUserPage.vue'
 import PersonalizedPage from '@/PersonalizedPage.vue'
 import CreateSocialProjectPage from '@/CreateSocialProjectPage.vue'
 import ProjectsByUser from '@/ProjectsByUser.vue'
+import PreviewTemplate1 from '@/PreviewTemplate1.vue'
+import PreviewTemplate2 from '@/PreviewTemplate2.vue'
 
 
 const router = createRouter({
@@ -47,6 +49,16 @@ const router = createRouter({
       path: "/mySocialProjects",
       name: "mySocialProjects",
       component: ProjectsByUser,
+    },
+    {
+      path: "/preview/template1",
+      name: "previewTemplate1",
+      component: PreviewTemplate1,
+    },
+    {
+      path: "/preview/template2",
+      name: "previewTemplate2",
+      component: PreviewTemplate2,
     },
   ],
 })

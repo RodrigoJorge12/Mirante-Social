@@ -1,150 +1,65 @@
 <script setup lang="ts">
 import { ref } from "vue";
-
 const props = defineProps<{ project: any }>();
-
 const contentRef = ref<HTMLElement | null>(null);
-
-function scrollToContent() {
-  contentRef.value?.scrollIntoView({ behavior: "smooth" });
-}
+function scrollToContent() { contentRef.value?.scrollIntoView({ behavior: "smooth" }); }
 </script>
 
 <template>
-  <div class="page">
-
-    <!-- HERO ANIMADO -->
-    <section class="hero" :style="{ '--theme': props.project.color }">
-      <div class="hero-content">
-        <h1 class="title">{{ props.project.name }}</h1>
-        <p class="subtitle">Conheça o projeto {{ props.project.name }}</p>
-
-        <el-button
-          type="success"
-          round
-          size="large"
-          class="cta-btn"
-          @click="scrollToContent"
-        >
-          Saiba mais
-        </el-button>
+  <div class="page" :style="{ '--accent': props.project.color }">
+    <header class="header">
+      <div class="brand">
+        <span class="dot" :style="{ background: 'var(--accent)' }"></span>
+        <span class="name">{{ props.project.name }}</span>
       </div>
-    </section>
+    </header>
 
     <div ref="contentRef"></div>
 
-    <!-- GRID DO CONTEÚDO -->
-    <el-row :gutter="20" class="content">
-      <el-col :xs="24" :md="14">
-        <el-card class="fade-card" shadow="hover">
-          <h2>Sobre o Projeto</h2>
-          <p>{{ props.project.description }}</p>
-        </el-card>
-      </el-col>
+    <section class="content">
+      <el-card class="card accent">
+        <h2 class="title">Sobre</h2>
+        <p class="text">{{ props.project.description }}</p>
+      </el-card>
+      <el-card class="card accent">
+        <h2 class="title">Necessidades</h2>
+        <p class="text">{{ props.project.needs }}</p>
+      </el-card>
+    </section>
 
-      <el-col :xs="24" :md="10" class="right-col">
+    <section class="info">
+      <el-card class="card">
+        <h3 class="subtitle">Contato</h3>
+        <div class="row"><span class="label">Email</span><span class="value">{{ props.project.email }}</span></div>
+        <div class="row"><span class="label">Telefone</span><span class="value">{{ props.project.phone }}</span></div>
+      </el-card>
 
-        <el-card class="info-card fade-card" shadow="never">
-          <h3>Localização</h3>
-          <p>{{ props.project.address }}</p>
-          <p>
-            {{ props.project.district }} —
-            {{ props.project.city }} / {{ props.project.state }}
-          </p>
-          <p>CEP: {{ props.project.zip }}</p>
-        </el-card>
-
-        <el-card class="info-card fade-card" shadow="never">
-          <h3>Contato</h3>
-          <p><b>Email:</b> {{ props.project.email }}</p>
-          <p><b>Telefone:</b> {{ props.project.phone }}</p>
-        </el-card>
-
-        <el-card class="info-card fade-card" shadow="never">
-          <h3>Site Oficial</h3>
-          <el-link :href="props.project.site" target="_blank" :style="{ color: props.project.color }">
-            Acessar site
-          </el-link>
-        </el-card>
-
-        <el-card class="info-card fade-card" shadow="never">
-          <h3>Necessidades</h3>
-          <p>{{ props.project.needs }}</p>
-        </el-card>
-
-      </el-col>
-    </el-row>
-
+      <el-card class="card">
+        <h3 class="subtitle">Localização</h3>
+        <div class="row"><span class="label">Endereço</span><span class="value">{{ props.project.address }}</span></div>
+        <div class="row"><span class="label">Bairro</span><span class="value">{{ props.project.district }}</span></div>
+        <div class="row"><span class="label">Cidade/UF</span><span class="value">{{ props.project.city }} / {{ props.project.state }}</span></div>
+        <div class="row"><span class="label">CEP</span><span class="value">{{ props.project.zip }}</span></div>
+      </el-card>
+    </section>
   </div>
 </template>
 
 <style scoped>
-.page {
-  width: 100%;
-  padding-bottom: 3rem;
-}
-
-/* HERO */
-.hero {
-  width: 100%;
-  padding: 4rem 1rem;
-  background: linear-gradient(135deg, var(--theme) 0%, #ffffff 80%);
-  border-radius: 1rem;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  animation: fadeIn 1s ease;
-}
-
-.hero-content {
-  max-width: 850px;
-  text-align: center;
-}
-
-.title {
-  font-size: 2.6rem;
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-  animation: slideDown 0.8s ease;
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  animation: fadeIn 1.4s ease;
-}
-
-.cta-btn {
-  margin-top: 1rem;
-  animation: fadeIn 1.8s ease;
-}
-
-/* Conteúdo */
-.content {
-  padding: 0 1rem;
-}
-
-.right-col .info-card {
-  margin-bottom: 1rem;
-}
-
-/* Animações */
-.fade-card {
-  animation: fadeUp 0.8s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideDown {
-  from { transform: translateY(-12px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
+.page { padding: 72px 24px 24px; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 0; }
+.brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.name { font-size: 18px; }
+.content { display: block; margin-top: 24px; }
+.content .card + .card { margin-top: 16px; }
+.info { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+.card { border-radius: 16px; padding: 12px 16px; box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+.accent { border-left: 4px solid var(--accent); }
+.title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.subtitle { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.text { line-height: 1.65; }
+.row { display: flex; align-items: center; justify-content: space-between; }
+.label { opacity: .7; }
+.value { font-weight: 600; }
 </style>
