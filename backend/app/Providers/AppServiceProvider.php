@@ -19,6 +19,9 @@ use App\Services\ReportService;
 use App\Repository\ProjectValidationRepository;
 use App\Repository\ProjectValidationRepositoryInRD;
 use App\Services\ProjectVerificationService;
+use App\Repository\ProjectRatingRepository;
+use App\Repository\ProjectRatingRepositoryInRD;
+use App\Services\ProjectRatingService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SocialProjectRepository::class, SocialProjectRepositoryInRD::class);
         $this->app->bind(ReportRepository::class, ReportRepositoryInRD::class);
         $this->app->bind(ProjectValidationRepository::class, ProjectValidationRepositoryInRD::class);
+        $this->app->bind(ProjectRatingRepository::class, ProjectRatingRepositoryInRD::class);
 
         // Register UserService as singleton
         $this->app->singleton(UserService::class, function ($app) {
@@ -45,6 +49,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ProjectVerificationService::class, function ($app) {
             return new ProjectVerificationService(
                 $app->make(ProjectValidationRepository::class),
+                $app->make(SocialProjectRepository::class)
+            );
+        });
+        $this->app->singleton(ProjectRatingService::class, function ($app) {
+            return new ProjectRatingService(
+                $app->make(ProjectRatingRepository::class),
                 $app->make(SocialProjectRepository::class)
             );
         });

@@ -23,6 +23,10 @@ function scrollToContent() { contentRef.value?.scrollIntoView({ behavior: "smoot
         <h2 class="title">Sobre</h2>
         <p class="text">{{ props.project.description }}</p>
       </el-card>
+      <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+        <el-rate :model-value="Number(props.project.rating_avg || 0)" disabled allow-half />
+        <small>({{ props.project.rating_count || 0 }})</small>
+      </div>
       <el-card class="card accent">
         <h2 class="title">Necessidades</h2>
         <p class="text">{{ props.project.needs }}</p>

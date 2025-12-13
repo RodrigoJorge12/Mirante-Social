@@ -105,6 +105,10 @@ function openDetails(project: any) {
                 {{ project.name }}
                 <VerifiedBadge :verified="project.verified" />
               </h2>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <el-rate :model-value="Number(project.rating_avg || 0)" disabled allow-half />
+                <small>({{ project.rating_count || 0 }})</small>
+              </div>
 
               <!-- SÓ a descrição tem scroll -->
               <div class="desc-box">
@@ -134,6 +138,7 @@ function openDetails(project: any) {
   <ProjectDetailsModal
     v-model="detailsVisible"
     :project="selectedProject"
+    @updated="async () => { const result = await presenter.GetAllProjects(); projects.value = result.data ?? projects.value; }"
   />
 </template>
 

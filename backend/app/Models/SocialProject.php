@@ -32,6 +32,8 @@ class SocialProject extends Model
         'target_audiences',
         'needs',
         'image_path',
+        'rating_avg',
+        'rating_count',
         'created_at',
         'updated_at',
     ];
@@ -40,6 +42,8 @@ class SocialProject extends Model
         'verified' => 'boolean',
         'target_audiences' => 'array', // TEXT[] do Postgre
         'verified_at' => 'datetime',
+        'rating_avg' => 'float',
+        'rating_count' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

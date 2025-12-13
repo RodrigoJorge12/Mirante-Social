@@ -5,13 +5,14 @@ import { ElMessage } from "element-plus";
 import { PresenterPersonalizedPage } from "./Presenters/PresenterPersonalizedPage";
 import VerifiedBadge from "./components/VerifiedBadge.vue";
 import { PresenterReport } from "./Presenters/PresenterReport";
+import { PresenterProjectRating } from "./Presenters/PresenterProjectRating";
 
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
   project: { type: Object, default: null },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "updated"]);
 
 // Fechar modal
 function closeModal() {
@@ -48,6 +49,45 @@ const categories = [
   { value: "enganoso", label: "Enganoso" },
   { value: "outro", label: "Outro" },
 ];
+const ratingPresenter = new PresenterProjectRating();
+const myRating = ref<number | null>(null);
+const myFeedback = ref<string>("");
+const savingRating = ref(false);
+const summaryAvg = ref<number>(0);
+const summaryCount = ref<number>(0);
+async function loadMyRating() {
+  if (!props.project) return;
+  const res = await ratingPresenter.getMine(props.project.id);
+  if (res?.success && res.data) {
+    myRating.value = res.data.rating ?? null;
+    myFeedback.value = res.data.feedback_text ?? "";
+  }
+}
+async function loadSummary(){
+  if (!props.project) return;
+  const s = await ratingPresenter.getSummary(props.project.id);
+  if (s?.success && s.data){
+    summaryAvg.value = Number(s.data.avg || 0);
+    summaryCount.value = Number(s.data.count || 0);
+  }
+}
+async function saveRating() {
+  if (!props.project) return;
+  if (myRating.value == null) {
+    ElMessage.error("Selecione uma nota");
+    return;
+  }
+  savingRating.value = true;
+  const ok = await ratingPresenter.postRating(props.project.id, myRating.value, myFeedback.value || undefined);
+  savingRating.value = false;
+  if (ok?.success) {
+    ElMessage.success("Avaliação salva");
+    await loadSummary();
+    emit("updated");
+  } else {
+    ElMessage.error("Não foi possível salvar");
+  }
+}
 async function submitReport() {
   if (!props.project) return;
   if (!reportCategory.value || !reportReason.value || reportReason.value.length < 10) {
@@ -77,6 +117,8 @@ watch(
     const url = await presenterPersonalizedPage.getUrlByProjectId(newProject.id);
 
     personalizedPageUrl.value = url;
+    await loadMyRating();
+    await loadSummary();
   },
   { immediate: true }
 );
@@ -140,6 +182,19 @@ watch(
       <el-tag type="success" size="large" round>
         {{ project.activity_area || "Não informado" }}
       </el-tag>
+
+      <h3 style="margin-top:20px;">Avaliação</h3>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <el-rate :model-value="summaryAvg" disabled allow-half />
+        <small>({{ summaryCount }})</small>
+      </div>
+
+      <div style="margin-top:12px;">
+        <h4 style="margin:0 0 6px 0;">Sua avaliação</h4>
+        <el-rate v-model="myRating" />
+        <el-input type="textarea" v-model="myFeedback" :rows="3" placeholder="Compartilhe um feedback (opcional)" />
+        <MiranteSocialButton :disabled="savingRating" style="margin-top:8px;" @click="saveRating">Salvar</MiranteSocialButton>
+      </div>
 
       <!-- PÚBLICO ALVO -->
       <h3 style="margin-top:20px;">Público-Alvo</h3>

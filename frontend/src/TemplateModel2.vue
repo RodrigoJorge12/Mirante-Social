@@ -11,6 +11,10 @@ import VerifiedBadge from "./components/VerifiedBadge.vue";
           {{ props.project.name }}
           <VerifiedBadge :verified="props.project.verified" />
         </h1>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+          <el-rate :model-value="Number(props.project.rating_avg || 0)" disabled allow-half />
+          <small>({{ props.project.rating_count || 0 }})</small>
+        </div>
         <p class="lead">{{ props.project.description }}</p>
         <div class="cta">
           <el-button type="success" round>Entrar em contato</el-button>

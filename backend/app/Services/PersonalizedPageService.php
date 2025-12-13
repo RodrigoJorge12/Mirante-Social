@@ -54,6 +54,8 @@ class PersonalizedPageService
                 'needs' => $project->needs,
                 'verified' => $project->verified,
                 'badge' => $project->badge,
+                'rating_avg' => $project->rating_avg,
+                'rating_count' => $project->rating_count,
             ],
         ];
     }
