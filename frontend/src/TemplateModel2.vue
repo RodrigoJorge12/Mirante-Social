@@ -1,12 +1,16 @@
 <script setup lang="ts">
 const props = defineProps<{ project: any }>();
+import VerifiedBadge from "./components/VerifiedBadge.vue";
 </script>
 
 <template>
   <div class="page">
     <section class="mast" :style="{ '--accent': props.project.color }">
       <div class="mast-inner">
-        <h1 class="title">{{ props.project.name }}</h1>
+        <h1 class="title">
+          {{ props.project.name }}
+          <VerifiedBadge :verified="props.project.verified" />
+        </h1>
         <p class="lead">{{ props.project.description }}</p>
         <div class="cta">
           <el-button type="success" round>Entrar em contato</el-button>

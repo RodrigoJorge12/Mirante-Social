@@ -52,6 +52,8 @@ class PersonalizedPageService
                 'area' => $project->activity_area,
                 'targets' => $project->target_audiences,
                 'needs' => $project->needs,
+                'verified' => $project->verified,
+                'badge' => $project->badge,
             ],
         ];
     }
@@ -66,7 +68,7 @@ class PersonalizedPageService
 
         // Montar URL completa
         $url = $slug;
-        $template = intval(str_replace("template", "", $template));// Extrai o número do template
+        $template = intval(str_replace("template", "", $template)); // Extrai o número do template
 
         // Criar a página personalizada no repositório
         $this->personalizedPageRepository->create([

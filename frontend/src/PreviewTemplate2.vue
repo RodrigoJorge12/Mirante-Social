@@ -16,6 +16,7 @@ const project = {
   site: "https://viverbem.org",
   needs:
     "Equipamentos médicos, profissionais voluntários (educação física e enfermagem) e kits de higiene.",
+  verified: true,
 };
 </script>
 
@@ -24,4 +25,3 @@ const project = {
     <TemplateModel2 :project="project" />
   </div>
 </template>
-

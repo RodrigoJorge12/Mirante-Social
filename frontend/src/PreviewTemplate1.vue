@@ -16,6 +16,7 @@ const project = {
   site: "https://projetoesperanca.org",
   needs:
     "Doações de materiais escolares, voluntários para reforço escolar e apoio psicológico.",
+  verified: true,
 };
 </script>
 
@@ -24,4 +25,3 @@ const project = {
     <TemplateModel1 :project="project" />
   </div>
   </template>
-

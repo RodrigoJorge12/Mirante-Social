@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { PresenterSocialProject } from "@/Presenters/PresenterSocialProject";
 import ProjectDetailsModal from "@/ProjectDetailsModal.vue";
 import MiranteSocialButton from "./components/MiranteSocialButton.vue";
+import VerifiedBadge from "./components/VerifiedBadge.vue";
 
 const presenter = new PresenterSocialProject();
 const projects = ref<any[]>([]);
@@ -100,7 +101,10 @@ function openDetails(project: any) {
 
             <!-- Conteúdo -->
             <div class="content-area">
-              <h2 class="title">{{ project.name }}</h2>
+              <h2 class="title">
+                {{ project.name }}
+                <VerifiedBadge :verified="project.verified" />
+              </h2>
 
               <!-- SÓ a descrição tem scroll -->
               <div class="desc-box">

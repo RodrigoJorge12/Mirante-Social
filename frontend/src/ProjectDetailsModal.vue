@@ -3,6 +3,7 @@ import MiranteSocialButton from "./components/MiranteSocialButton.vue";
 import { defineProps, defineEmits, computed, ref, watch } from "vue";
 import { ElMessage } from "element-plus";
 import { PresenterPersonalizedPage } from "./Presenters/PresenterPersonalizedPage";
+import VerifiedBadge from "./components/VerifiedBadge.vue";
 import { PresenterReport } from "./Presenters/PresenterReport";
 
 const props = defineProps({
@@ -89,8 +90,9 @@ watch(
     center
   >
     <template #header>
-      <h2 style="color:#10B981; margin:0; font-size:24px;">
-        {{ project?.name }}
+      <h2 style="margin:0; font-size:24px; display:flex; align-items:center; gap:8px;">
+        <span>{{ project?.name }}</span>
+        <VerifiedBadge :verified="project?.verified" />
       </h2>
     </template>
 

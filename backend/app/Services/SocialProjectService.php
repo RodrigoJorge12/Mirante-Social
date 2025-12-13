@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\SocialProject;
 use App\Repository\SocialProjectRepository;
@@ -59,7 +60,7 @@ class SocialProjectService
         // Envia para o repositório
         $project = $this->repository->create($normalized);
 
-        if($data['wantsPersonalizedPage']) {
+        if ($data['wantsPersonalizedPage']) {
             // Cria página personalizada se solicitado
             app(PersonalizedPageService::class)->createPersonalizedPage($project->id, $data['selectedTemplate']);
         }
@@ -104,7 +105,7 @@ class SocialProjectService
         $project = $this->repository->updateProject($id, $normalized);
 
         return $project;
-    }   
+    }
     public function getAllProjects()
     {
         $projects = $this->repository->allProjects();
@@ -123,7 +124,6 @@ class SocialProjectService
                 } else {
                     $project->image = null;
                 }
-
             } else {
                 $project->image = null;
             }
@@ -151,7 +151,6 @@ class SocialProjectService
                 } else {
                     $project->image = null;
                 }
-
             } else {
                 $project->image = null;
             }
@@ -204,7 +203,6 @@ class SocialProjectService
             } else {
                 $project->image = null;
             }
-
         } else {
             $project->image = null;
         }

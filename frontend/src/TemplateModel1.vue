@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import VerifiedBadge from "./components/VerifiedBadge.vue";
 const props = defineProps<{ project: any }>();
 const contentRef = ref<HTMLElement | null>(null);
 function scrollToContent() { contentRef.value?.scrollIntoView({ behavior: "smooth" }); }
@@ -11,6 +12,7 @@ function scrollToContent() { contentRef.value?.scrollIntoView({ behavior: "smoot
       <div class="brand">
         <span class="dot" :style="{ background: 'var(--accent)' }"></span>
         <span class="name">{{ props.project.name }}</span>
+        <VerifiedBadge :verified="props.project.verified" />
       </div>
     </header>
 
