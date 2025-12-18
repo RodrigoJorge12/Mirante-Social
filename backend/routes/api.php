@@ -15,6 +15,7 @@ Route::get('/', function () {
 });
 
 Route::post('/users', [UserController::class, 'create']);
+Route::get('projects/near', [SocialProjectController::class, 'getProjectsNear']);
 Route::post('/verifyEmail', [ValidationController::class, 'verifyCode']);
 Route::get('/personalized-page/{slug}', [PersonalizedPageController::class, 'getPersonalizedPage']);
 Route::get('/socialProjects', [SocialProjectController::class, 'getAllProjects']);

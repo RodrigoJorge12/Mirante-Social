@@ -3,7 +3,7 @@ export class ServiceSocialProject {
     constructor(){
         this.backendURL = import.meta.env.VITE_API_URL;
     }
-    async CreateSocialProject( name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null, wantsPersonalizedPage: boolean, selectedTemplate: string){
+    async CreateSocialProject( name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null, wantsPersonalizedPage: boolean, selectedTemplate: string, latitude: number | null, longitude: number | null){
         try {
             const formData = new FormData()
 
@@ -21,6 +21,8 @@ export class ServiceSocialProject {
             formData.append("targetAudiences", JSON.stringify(targetAudiences))
             formData.append("wantsPersonalizedPage", wantsPersonalizedPage ? "true" : "false")
             formData.append("selectedTemplate", selectedTemplate)
+            formData.append("latitude", latitude !== null ? latitude.toString() : "")
+            formData.append("longitude", longitude !== null ? longitude.toString() : "")
 
             if (image) {
                 formData.append("image", image)
@@ -154,5 +156,26 @@ export class ServiceSocialProject {
             console.error(error);
             return;
         }
+    }
+    async getProjectsNear(latitude: number, longitude: number, radius: number) {
+        const url = new URL(`${this.backendURL}/api/projects/near`);
+
+        url.searchParams.append("lat", latitude.toString());
+        url.searchParams.append("lng", longitude.toString());
+        url.searchParams.append("radius", radius.toString());
+
+        const response = await fetch(url.toString(), {
+        method: "GET",
+        credentials: "include", // importante se você usa auth por cookie
+        headers: {
+            "Accept": "application/json",
+        },
+        });
+
+        if (!response.ok) {
+        throw new Error("Erro ao buscar projetos próximos");
+        }
+
+        return await response.json();
     }
 }

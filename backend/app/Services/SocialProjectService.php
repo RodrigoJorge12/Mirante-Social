@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\SocialProject;
 use App\Repository\SocialProjectRepository;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Exception;
 
 class SocialProjectService
@@ -55,6 +57,8 @@ class SocialProjectService
             'activity_area'    => $data['activityArea'] ?? null,
             'target_audiences' => json_encode($data['targetAudiences'] ?? []),
             'image_path'       => $data['image_path'] ?? null,
+            'latitude'         => $data['latitude'] ?? null,
+            'longitude'        => $data['longitude'] ?? null,
         ];
 
         // Envia para o repositório
@@ -100,6 +104,8 @@ class SocialProjectService
             'activity_area'    => $data['activityArea'] ?? null,
             'target_audiences' => json_encode($data['targetAudiences'] ?? []),
             'image_path'       => $data['image_path'] ?? null,
+            'latitude'         => $data['latitude'] ?? null,
+            'longitude'        => $data['longitude'] ?? null,
         ];
 
         $project = $this->repository->updateProject($id, $normalized);
@@ -210,5 +216,32 @@ class SocialProjectService
         unset($project->image_path);
 
         return $project;
+    }
+    public function getProjectsNear(float $latitude, float $longitude, int $radiusKm)
+    {
+        $projects = $this->repository->getProjectsNear($latitude, $longitude, $radiusKm);
+
+        foreach ($projects as $project) {
+
+            if ($project->image_path) {
+
+                $fullPath = public_path('storage/' . $project->image_path);
+
+                if (File::exists($fullPath)) {
+                    $file = File::get($fullPath);
+                    $mime = mime_content_type($fullPath);
+
+                    $project->image = 'data:' . $mime . ';base64,' . base64_encode($file);
+                } else {
+                    $project->image = null;
+                }
+            } else {
+                $project->image = null;
+            }
+
+            unset($project->image_path);
+        }
+        Log::info("Found " . count($projects) . " projects near ($latitude, $longitude) within $radiusKm km.");
+        return $projects;
     }
 }

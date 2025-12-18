@@ -7,6 +7,8 @@ import CreateSocialProjectPage from '@/CreateSocialProjectPage.vue'
 import ProjectsByUser from '@/ProjectsByUser.vue'
 import PreviewTemplate1 from '@/PreviewTemplate1.vue'
 import PreviewTemplate2 from '@/PreviewTemplate2.vue'
+import SocialProjectsNear from '@/SocialProjectsNear.vue'
+
 
 
 const router = createRouter({
@@ -60,6 +62,11 @@ const router = createRouter({
       name: "previewTemplate2",
       component: PreviewTemplate2,
     },
+    {
+      path: "/socialProjectsNear",
+      name: "socialProjectsNear",
+      component: SocialProjectsNear,
+    }
   ],
 })
 
