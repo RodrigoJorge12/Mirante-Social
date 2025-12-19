@@ -4,6 +4,7 @@ import { ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElMessage } from "elem
 import type { FormInstance, FormRules } from "element-plus"
 import MiranteSocialButton from "./components/MiranteSocialButton.vue"
 import { PresenterSocialProject } from "./Presenters/PresenterSocialProject"
+import LocationPicker from "@/LocationPicker.vue";
 import router from "./router"
 
 
@@ -39,6 +40,8 @@ interface CompanyForm {
   activityArea: string
   targetAudiences: string[]
   image: File | null
+  latitude: number | null
+  longitude: number | null
 }
 
 const formRef = ref<FormInstance>()
@@ -61,6 +64,8 @@ const form = reactive<CompanyForm>({
   activityArea: "",
   targetAudiences: [],
   image: null,
+  latitude: null as number | null,
+  longitude: null as number | null,
 })
 
 // Validações
@@ -82,7 +87,10 @@ const rules: FormRules<CompanyForm> = {
     { required: true, min: 2, max: 2, message: "UF deve ter 2 caracteres", trigger: "blur" }
   ],
 }
-
+function onLocationUpdate(location: { latitude: number; longitude: number }) {
+  form.latitude = location.latitude;
+  form.longitude = location.longitude;
+}
 // Envio
 const sendDataCreateSocialProject = async () => {
   if (!formRef.value) return
@@ -92,7 +100,7 @@ const sendDataCreateSocialProject = async () => {
 
     if (valid) {
         const presenter = new PresenterSocialProject();
-        const status = await presenter.CreateSocialProject(form.name, form.description, form.address, form.district, form.city, form.state, form.zipCode, form.phone, form.contactEmail, form.websiteUrl, form.visualColor, form.activityArea, form.targetAudiences, form.image, wantsPage.value, selectedTemplate.value);
+        const status = await presenter.CreateSocialProject(form.name, form.description, form.address, form.district, form.city, form.state, form.zipCode, form.phone, form.websiteUrl, form.visualColor, form.activityArea, form.targetAudiences, form.image, wantsPage.value, selectedTemplate.value, form.latitude, form.longitude);
         if (status && status.success){
           ElMessage.success("Projeto Social cadastrado com sucesso!");
           router.push("/");
@@ -169,6 +177,14 @@ const sendDataCreateSocialProject = async () => {
 
       <el-form-item label="CEP" prop="zipCode">
         <el-input v-model="form.zipCode" placeholder="CEP" />
+      </el-form-item>
+
+      <el-form-item label="Localização no mapa">
+        <LocationPicker
+          :cep="form.zipCode"
+          :city="form.city"
+          @update:location="onLocationUpdate"
+        />
       </el-form-item>
 
       <!-- CONTATOS -->

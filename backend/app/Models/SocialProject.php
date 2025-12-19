@@ -36,6 +36,8 @@ class SocialProject extends Model
         'rating_count',
         'created_at',
         'updated_at',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [

@@ -16,7 +16,7 @@ function goToInitialPage(){
   router.push("/");
 } 
 function goToMapPage(){
-  ElMessage.info("Página de mapa em breve.");
+  router.push("/socialProjectsNear");
 }
 async function logout() {
   try {

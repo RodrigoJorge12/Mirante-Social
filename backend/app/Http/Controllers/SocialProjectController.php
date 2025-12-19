@@ -53,6 +53,8 @@ class SocialProjectController extends Controller
                 'image'            => 'nullable|file|image|max:4096', // 4MB
                 'wantsPersonalizedPage' => 'nullable|boolean',
                 'selectedTemplate' => 'nullable|string|max:100',
+                'latitude'         => 'nullable|numeric',
+                'longitude'        => 'nullable|numeric',
             ]);
 
             if ($validator->fails()) {
@@ -74,6 +76,36 @@ class SocialProjectController extends Controller
                 ]
             ], 201);
         } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno do servidor'
+            ], 500);
+        }
+    }
+    public function getProjectsNear(): JsonResponse
+    {
+        try {
+            $latitude  = request()->query('lat');
+            $longitude = request()->query('lng');
+            $radius    = request()->query('radius', 20);
+
+            if (!is_numeric($latitude) || !is_numeric($longitude) || !is_numeric($radius)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Parâmetros inválidos'
+                ], 422);
+            }
+
+            $projects = $this->socialProjectService->getProjectsNear(floatval($latitude), floatval($longitude), intval($radius));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Projetos sociais próximos obtidos com sucesso',
+                'data' => $projects
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching nearby social projects: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Erro interno do servidor'

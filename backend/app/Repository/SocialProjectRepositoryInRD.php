@@ -43,4 +43,30 @@ class SocialProjectRepositoryInRD implements SocialProjectRepository
         }
         return null;
     }
+    public function getProjectsNear(float $latitude, float $longitude, int $radiusKm) {
+        $haversine = "
+            6371 * acos(
+                cos(radians(?))
+                * cos(radians(latitude))
+                * cos(radians(longitude) - radians(?))
+                + sin(radians(?))
+                * sin(radians(latitude))
+            )
+        ";
+
+        return SocialProject::query()
+            ->select('*')
+            ->fromSub(
+                SocialProject::selectRaw("
+                    social_projects.*,
+                    ($haversine) AS distance
+                ", [$latitude, $longitude, $latitude]),
+                'social_projects'
+            )
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->where('distance', '<=', $radiusKm)
+            ->orderBy('distance')
+            ->get();
+    }
 }
