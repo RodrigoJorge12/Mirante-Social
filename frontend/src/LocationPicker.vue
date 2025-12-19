@@ -22,9 +22,6 @@ const marker = ref<L.Marker | null>(null);
 const latitude = ref<number | null>(null);
 const longitude = ref<number | null>(null);
 
-// ==============================
-// 🗺️ Inicializa mapa
-// ==============================
 function initMap(lat: number, lng: number) {
   if (map.value) return;
 
@@ -51,10 +48,9 @@ function initMap(lat: number, lng: number) {
 }
 
 async function centerMapByData(cep: string) {
-  // Lista de tentativas em ordem
   const cepsToTry = [
     cep?.replace(/\D/g, ""),
-    "28630000", // CEP geral de Nova Friburgo (fallback)
+    "28630000", // CEP geral de Nova Friburgo caso falhe (fallback)
   ].filter(Boolean);
 
   for (const currentCep of cepsToTry) {
@@ -76,15 +72,13 @@ async function centerMapByData(cep: string) {
         const lng = parseFloat(data[0].lon);
 
         updateMapPosition(lat, lng);
-        return; // 🔥 sucesso, sai da função
+        return;
       }
     } catch {
-      // ignora erro e tenta próximo CEP
+      
     }
   }
 
-  // 🔴 Se absolutamente nada funcionou
-  // Centraliza manualmente em Nova Friburgo
   updateMapPosition(-22.2816, -42.5311);
 }
 function updateMapPosition(lat: number, lng: number) {
@@ -104,9 +98,6 @@ function updateMapPosition(lat: number, lng: number) {
   });
 }
 
-// ==============================
-// 🔄 Observa CEP e cidade
-// ==============================
 watch(
   () => props.cep,
   (newCep) => {

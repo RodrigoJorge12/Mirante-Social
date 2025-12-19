@@ -19,17 +19,15 @@ const loading = ref<boolean>(false);
 
 const projects = ref<any[]>([]);
 
-// ==============================
-// 📍 Localização do usuário
-// ==============================
 function getUserLocation() {
   if (!navigator.geolocation) {
     ElMessage.error("Seu navegador não suporta geolocalização.");
     return;
   }
-
+  console.log("Obtendo localização do usuário...");
   navigator.geolocation.getCurrentPosition(
     (position) => {
+      console.log("Localização obtida:", position.coords);
       userLat.value = position.coords.latitude;
       userLng.value = position.coords.longitude;
 
@@ -47,11 +45,9 @@ const userIcon = L.icon({
   iconAnchor: [20, 40],
   popupAnchor: [0, -40],
 });
-// ==============================
-// 🗺️ Inicialização do mapa
-// ==============================
+
 function initMap() {
-  if (map.value) return; // 🔥 trava reinicialização
+  if (map.value) return; 
 
   map.value = L.map("map").setView(
     [userLat.value!, userLng.value!],
@@ -73,9 +69,6 @@ L.marker(
 }
 
 
-// ==============================
-// 🔎 Buscar projetos próximos
-// ==============================
 async function fetchProjects() {
   if (!userLat.value || !userLng.value) return;
 
@@ -97,10 +90,6 @@ async function fetchProjects() {
   }
 }
 
-// ==============================
-// 📌 Plotar projetos no mapa
-// (SOMENTE latitude e longitude)
-// ==============================
 function plotProjects() {
   if (!map.value || !markersLayer.value) return;
 
@@ -123,16 +112,10 @@ function plotProjects() {
   });
 }
 
-// ==============================
-// 🔄 Atualizar ao mudar o raio
-// ==============================
 watch(radius, () => {
   fetchProjects();
 });
 
-// ==============================
-// 🚀 Init
-// ==============================
 onMounted(() => {
   getUserLocation();
 });
