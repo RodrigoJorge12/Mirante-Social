@@ -50,12 +50,18 @@ class SocialProjectService
             'state'            => $data['state'] ?? null,
             'zip_code'         => $data['zipCode'] ?? null,
             'phone'            => $data['phone'] ?? null,
+            'contact_email'    => $data['contactEmail'] ?? ($data['contact_email'] ?? null),
             'website_url'      => $data['websiteUrl'] ?? null,
             'visual_color'     => $data['visualColor'] ?? null,
             'activity_area'    => $data['activityArea'] ?? null,
             'target_audiences' => json_encode($data['targetAudiences'] ?? []),
             'image_path'       => $data['image_path'] ?? null,
         ];
+        $hasPhone = trim((string) ($normalized['phone'] ?? '')) !== '';
+        $hasEmail = trim((string) ($normalized['contact_email'] ?? '')) !== '';
+        $normalized['verified'] = $hasPhone && $hasEmail;
+        $normalized['verified_at'] = $normalized['verified'] ? now() : null;
+        $normalized['badge'] = $normalized['verified'] ? 'verified' : null;
 
         // Envia para o repositório
         $project = $this->repository->create($normalized);
@@ -95,12 +101,18 @@ class SocialProjectService
             'state'            => $data['state'] ?? null,
             'zip_code'         => $data['zipCode'] ?? null,
             'phone'            => $data['phone'] ?? null,
+            'contact_email'    => $data['contactEmail'] ?? ($data['contact_email'] ?? null),
             'website_url'      => $data['websiteUrl'] ?? null,
             'visual_color'     => $data['visualColor'] ?? null,
             'activity_area'    => $data['activityArea'] ?? null,
             'target_audiences' => json_encode($data['targetAudiences'] ?? []),
             'image_path'       => $data['image_path'] ?? null,
         ];
+        $hasPhoneU = trim((string) ($normalized['phone'] ?? '')) !== '';
+        $hasEmailU = trim((string) ($normalized['contact_email'] ?? '')) !== '';
+        $normalized['verified'] = $hasPhoneU && $hasEmailU;
+        $normalized['verified_at'] = $normalized['verified'] ? now() : null;
+        $normalized['badge'] = $normalized['verified'] ? 'verified' : null;
 
         $project = $this->repository->updateProject($id, $normalized);
 

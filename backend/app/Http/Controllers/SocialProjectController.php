@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\SocialProjectService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+
 class SocialProjectController extends Controller
 {
     private SocialProjectService $userService;
@@ -40,11 +43,12 @@ class SocialProjectController extends Controller
                 'state'            => 'nullable|string|size:2',
                 'zipCode'          => 'nullable|string|max:20',
                 'phone'            => 'nullable|string|max:30',
+                'contactEmail'     => 'nullable|email|max:255',
                 'websiteUrl'       => 'nullable|string|max:255',
                 'visualColor'      => 'nullable|string|max:20',
                 'activityArea'     => 'nullable|string|max:255',
                 'targetAudiences'  => 'nullable|array',
-                'targetAudiences.*'=> 'string',
+                'targetAudiences.*' => 'string',
 
                 'image'            => 'nullable|file|image|max:4096', // 4MB
                 'wantsPersonalizedPage' => 'nullable|boolean',
@@ -69,7 +73,6 @@ class SocialProjectController extends Controller
                     'name' => $socialProject->name,
                 ]
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -87,7 +90,6 @@ class SocialProjectController extends Controller
                 'message' => 'Projetos sociais obtidos com sucesso',
                 'data' => $projects
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -105,7 +107,6 @@ class SocialProjectController extends Controller
                 'message' => 'Projetos sociais do usuário obtidos com sucesso',
                 'data' => $projects
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -122,7 +123,6 @@ class SocialProjectController extends Controller
                 'success' => true,
                 'message' => 'Projeto social deletado com sucesso'
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -140,7 +140,6 @@ class SocialProjectController extends Controller
                 'message' => 'Projeto social obtido com sucesso',
                 'data' => $projects
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -168,11 +167,12 @@ class SocialProjectController extends Controller
                 'state'            => 'nullable|string|size:2',
                 'zipCode'          => 'nullable|string|max:20',
                 'phone'            => 'nullable|string|max:30',
+                'contactEmail'     => 'nullable|email|max:255',
                 'websiteUrl'       => 'nullable|string|max:255',
                 'visualColor'      => 'nullable|string|max:20',
                 'activityArea'     => 'nullable|string|max:255',
                 'targetAudiences'  => 'nullable|array',
-                'targetAudiences.*'=> 'string',
+                'targetAudiences.*' => 'string',
 
                 'image'            => 'nullable|file|image|max:4096', // 4MB
             ]);
@@ -193,14 +193,13 @@ class SocialProjectController extends Controller
                 'message' => 'Projeto Social atualizado com sucesso',
                 'data' => [
                     'name'  => $socialProject->name,
-                ]                   
+                ]
             ], 200);
         } catch (\Exception $e) {
-            return response()->json([                
+            return response()->json([
                 'success' => false,
                 'message' => 'Erro interno do servidor'
-            ], 500);                                    
+            ], 500);
         }
     }
 }
-?>

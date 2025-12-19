@@ -37,6 +37,7 @@ const form = reactive({
   state: "",
   zipCode: "",
   phone: "",
+  contactEmail: "",
   websiteUrl: "",
   visualColor: "",
   activityArea: "",
@@ -76,6 +77,7 @@ watch(
     form.state = p.state;
     form.zipCode = p.zip_code;
     form.phone = p.phone;
+    form.contactEmail = p.contact_email;
     form.websiteUrl = p.website_url;
     form.visualColor = p.visual_color;
     form.activityArea = p.activity_area;
@@ -130,6 +132,7 @@ const submit = async () => {
     form.state,
     form.zipCode,
     form.phone,
+    form.contactEmail,
     form.websiteUrl,
     form.visualColor,
     form.activityArea,
@@ -210,6 +213,10 @@ const submit = async () => {
 
       <el-form-item label="Telefone">
         <el-input v-model="form.phone" />
+      </el-form-item>
+
+      <el-form-item label="E-mail de contato">
+        <el-input v-model="form.contactEmail" />
       </el-form-item>
 
       <el-form-item label="Website">

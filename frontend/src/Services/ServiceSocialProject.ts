@@ -3,7 +3,7 @@ export class ServiceSocialProject {
     constructor(){
         this.backendURL = import.meta.env.VITE_API_URL;
     }
-    async CreateSocialProject( name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null, wantsPersonalizedPage: boolean, selectedTemplate: string){
+    async CreateSocialProject( name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, contactEmail: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null, wantsPersonalizedPage: boolean, selectedTemplate: string){
         try {
             const formData = new FormData()
 
@@ -15,6 +15,7 @@ export class ServiceSocialProject {
             formData.append("state", state)
             formData.append("zipCode", zipCode)
             formData.append("phone", phone)
+            formData.append("contactEmail", contactEmail ?? "")
             formData.append("websiteUrl", websiteUrl ?? "")
             formData.append("visualColor", visualColor)
             formData.append("activityArea", activityArea)
@@ -116,7 +117,7 @@ export class ServiceSocialProject {
             return;
         }
     }
-    async UpdateSocialProject( id: number, name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null){
+    async UpdateSocialProject( id: number, name: string, description: string, address: string, district: string, city: string, state: string, zipCode: string, phone: string, contactEmail: string, websiteUrl: string, visualColor: string, activityArea: string, targetAudiences: string[], image: File | null){
         try {
             const formData = new FormData()
 
@@ -128,6 +129,7 @@ export class ServiceSocialProject {
             formData.append("state", state)
             formData.append("zipCode", zipCode)
             formData.append("phone", phone)
+            formData.append("contactEmail", contactEmail ?? "")
             formData.append("websiteUrl", websiteUrl ?? "")
             formData.append("visualColor", visualColor)
             formData.append("activityArea", activityArea)

@@ -5,7 +5,6 @@ use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\PersonalizedPageController;
 use App\Http\Controllers\SocialProjectController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ProjectVerificationController;
 use App\Http\Controllers\ProjectRatingController;
 use App\Http\Middleware\ModeratorMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -33,8 +32,6 @@ Route::middleware(['api'])->group(function () {
     Route::post('/reports', [ReportController::class, 'create']);
     Route::get('/reports/mine', [ReportController::class, 'mine']);
 
-    Route::post('/projects/{id}/verification/start', [ProjectVerificationController::class, 'start']);
-    Route::post('/projects/{id}/verification/confirm', [ProjectVerificationController::class, 'confirm']);
 
     Route::post('/projects/{id}/ratings', [ProjectRatingController::class, 'upsert']);
     Route::get('/projects/{id}/ratings/summary', [ProjectRatingController::class, 'summary']);

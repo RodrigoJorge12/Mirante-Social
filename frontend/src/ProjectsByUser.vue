@@ -4,6 +4,7 @@ import { ElMessageBox, ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import { PresenterSocialProject } from "@/Presenters/PresenterSocialProject"; // AJUSTADO
 import EditSocialProject from "@/EditSocialProject.vue";
+import VerifiedBadge from "@/components/VerifiedBadge.vue";
 
 const router = useRouter();
 const presenter = new PresenterSocialProject(); // AJUSTADO
@@ -13,6 +14,8 @@ const projects = ref<any[]>([]);
 
 const showModal = ref(false);
 const editId = ref<number | null>(null);
+
+const sendingVerification = ref(false);
 
 function editProject(id: number) {
   editId.value = id;
@@ -55,6 +58,7 @@ async function deleteProject(id: number) {
     }
   } catch {}
 }
+
 </script>
 
 <template>
@@ -86,8 +90,10 @@ async function deleteProject(id: number) {
 
         <div v-else class="no-image">Sem imagem</div>
 
-        <!-- Título -->
-        <h3 class="title">{{ project.name }}</h3>
+        <h3 class="title">
+          {{ project.name }}
+          <VerifiedBadge :verified="project.verified" />
+        </h3>
 
         <!-- Conteúdo com scroll -->
         <div class="scroll">
@@ -104,7 +110,6 @@ async function deleteProject(id: number) {
 
         
 
-        <!-- Botões -->
         <div class="actions">
           <el-button type="primary" size="small" @click="editProject(project.id)">
             Editar
@@ -113,11 +118,18 @@ async function deleteProject(id: number) {
           <el-button type="danger" size="small" @click="deleteProject(project.id)">
             Apagar
           </el-button>
+          <template v-if="!project.verified">
+            <el-tag type="info" size="small">Adicione telefone e e-mail</el-tag>
+          </template>
+          <el-tag v-else type="success" size="small">Verificado</el-tag>
         </div>
       </el-card>
 
     </div>
   </div>
+
+  
+
 </template>
 
 <style scoped>

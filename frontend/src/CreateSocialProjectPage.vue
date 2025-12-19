@@ -31,6 +31,7 @@ interface CompanyForm {
   zipCode: string
 
   phone: string
+  contactEmail: string
   websiteUrl: string
 
   visualColor: string
@@ -52,6 +53,7 @@ const form = reactive<CompanyForm>({
   zipCode: "",
 
   phone: "",
+  contactEmail: "",
   websiteUrl: "",
 
   visualColor: "",
@@ -68,7 +70,8 @@ const rules: FormRules<CompanyForm> = {
   address: [{ required: true, message: "Endereço obrigatório", trigger: "blur" }],
   city: [{ required: true, message: "Cidade obrigatória", trigger: "blur" }],
   zipCode: [{ required: true, message: "CEP obrigatória", trigger: "blur" }],
-  phone: [{ required: true, message: "Telefone obrigatória", trigger: "blur" }],
+  phone: [{ required: true, message: "Telefone obrigatório", trigger: "blur" }],
+  contactEmail: [{ required: false, type: 'email', message: "E-mail inválido", trigger: "blur" }],
   visualColor: [{ required: true, message: "Cor principal obrigatória", trigger: "blur" }],
   activityArea: [{ required: true, message: "Area de atividade obrigatória", trigger: "blur" }],
   targetAudiences: [{ required: true, message: "Publico Alvo obrigatório", trigger: "blur" }],
@@ -89,7 +92,7 @@ const sendDataCreateSocialProject = async () => {
 
     if (valid) {
         const presenter = new PresenterSocialProject();
-        const status = await presenter.CreateSocialProject(form.name, form.description, form.address, form.district, form.city, form.state, form.zipCode, form.phone, form.websiteUrl, form.visualColor, form.activityArea, form.targetAudiences, form.image, wantsPage.value, selectedTemplate.value);
+        const status = await presenter.CreateSocialProject(form.name, form.description, form.address, form.district, form.city, form.state, form.zipCode, form.phone, form.contactEmail, form.websiteUrl, form.visualColor, form.activityArea, form.targetAudiences, form.image, wantsPage.value, selectedTemplate.value);
         if (status && status.success){
           ElMessage.success("Projeto Social cadastrado com sucesso!");
           router.push("/");
@@ -171,6 +174,10 @@ const sendDataCreateSocialProject = async () => {
       <!-- CONTATOS -->
       <el-form-item label="Telefone" prop="phone">
         <el-input v-model="form.phone" placeholder="Telefone" />
+      </el-form-item>
+
+      <el-form-item label="E-mail de contato">
+        <el-input v-model="form.contactEmail" placeholder="email@dominio.com" />
       </el-form-item>
 
       <el-form-item label="Website">
