@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\SocialProject;
+use App\Models\PersonalizedPage;
 
 class SocialProjectRepositoryInRD implements SocialProjectRepository
 {
@@ -24,7 +25,14 @@ class SocialProjectRepositoryInRD implements SocialProjectRepository
     }
     public function projectsByUserId(int $userId)
     {
-        return SocialProject::where('user_id', $userId)->get();
+        $projects = SocialProject::where('user_id', $userId)->get();
+        $pageIds = PersonalizedPage::whereIn('social_project_id', $projects->pluck('id'))
+            ->pluck('social_project_id')
+            ->flip();
+        return $projects->map(function ($p) use ($pageIds) {
+            $p->has_personalized_page = $pageIds->has($p->id);
+            return $p;
+        });
     }
     public function deleteProject(int $id)
     {

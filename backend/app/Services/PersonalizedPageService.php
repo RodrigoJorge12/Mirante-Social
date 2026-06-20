@@ -35,6 +35,7 @@ class PersonalizedPageService
                 'url' => $page->url,
                 'template' => $page->template,
                 'caption' => $page->caption,
+                'gallery_images' => $page->gallery_images,
             ],
             'project' => [
                 'id' => $project->id,
@@ -52,10 +53,15 @@ class PersonalizedPageService
                 'area' => $project->activity_area,
                 'targets' => $project->target_audiences,
                 'needs' => $project->needs,
+                'instagram' => $project->instagram_url,
+                'facebook'  => $project->facebook_url,
+                'hours'     => $project->operating_hours,
+                'mission'   => $project->mission,
+                'image'     => $project->image_path,
             ],
         ];
     }
-    public function createPersonalizedPage(int $socialProjectId, string $template): void
+    public function createPersonalizedPage(int $socialProjectId, string $template)
     {
         // Gerar slug único baseado no nome do projeto e um sufixo aleatório
         $project = $this->socialProjectService->findById($socialProjectId);
@@ -68,8 +74,8 @@ class PersonalizedPageService
         $url = $slug;
         $template = intval(str_replace("template", "", $template));// Extrai o número do template
 
-        // Criar a página personalizada no repositório
-        $this->personalizedPageRepository->create([
+        // Criar a página personalizada no repositório e retornar o objeto
+        return $this->personalizedPageRepository->create([
             'social_project_id' => $socialProjectId,
             'url' => $url,
             'caption' => $caption,

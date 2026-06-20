@@ -1,10 +1,16 @@
 <script setup lang="ts">
-  import { RouterLink, RouterView } from 'vue-router'
+  import { computed } from 'vue'
+  import { RouterLink, RouterView, useRoute } from 'vue-router'
   import Header from '@/Header.vue';
+  import Footer from '@/Footer.vue';
+
+  const route = useRoute();
+  const hideHeader = computed(() => route.path.startsWith('/personalizedPages'))
 </script>
 <template>
-  <Header />
+  <Header v-if="!hideHeader" />
   <RouterView />
+  <Footer v-if="!route.path.startsWith('/personalizedPages')" />
 </template>
 
 <style>

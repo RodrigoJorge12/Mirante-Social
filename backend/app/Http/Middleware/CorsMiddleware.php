@@ -10,11 +10,13 @@ class CorsMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // 🔥 define aqui antes de tudo
+        $origin = $request->headers->get('Origin');
+        $allowedOrigin = env('FRONTEND_URL', 'http://127.0.0.1:5173');
+
         $headers = [
-            'Access-Control-Allow-Origin' => 'https://frontend-cool-wildflower-2471.fly.dev',
+            'Access-Control-Allow-Origin' => $allowedOrigin,
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With, X-App-Key',
             'Access-Control-Allow-Credentials' => 'true',
         ];
 

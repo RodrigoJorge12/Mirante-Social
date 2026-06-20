@@ -1,30 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 @import './base.css';
+
+:root {
+  /* Jardim Aberto — green palette */
+  --g900: #022C22;
+  --g800: #064E3B;
+  --g700: #065F46;
+  --g600: #047857;
+  --g500: #059669;
+  --g400: #10B981;
+  --g300: #34D399;
+  --g200: #6EE7B7;
+  --g100: #A7F3D0;
+  --g50:  #D1FAE5;
+  --g25:  #ECFDF5;
+  --g10:  #F0FDF4;
+
+  /* Element Plus primary colors (mapped to green palette) */
+  --el-color-primary: #10B981;
+  --el-color-primary-dark-2: #059669;
+  --el-color-primary-light-3: #6EE7B7;
+  --el-color-primary-light-5: #A7F3D0;
+  --el-color-primary-light-7: #D1FAE5;
+  --el-color-primary-light-8: #ECFDF5;
+  --el-color-primary-light-9: #F0FDF4;
+}
 
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   font-weight: normal;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+/* ── El-Select dropdown global override ──────────────── */
+.el-select-dropdown__item {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #065F46 !important;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.el-select-dropdown__item.is-selected,
+.el-select-dropdown__item.selected {
+  color: #059669 !important;
+  font-weight: 800 !important;
+  background: #F0FDF4 !important;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.el-select-dropdown__item:hover,
+.el-select-dropdown__item.is-hovering {
+  background: #F0FDF4 !important;
+  color: #047857 !important;
+}
 
+.el-select-dropdown__item .el-icon {
+  color: #059669 !important;
+}
+
+/* Tags (chips) selecionados */
+.el-tag {
+  background: #D1FAE5 !important;
+  border-color: #A7F3D0 !important;
+  color: #065F46 !important;
+  border-radius: 8px !important;
+  font-family: 'Nunito', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+}
+
+.el-tag .el-tag__close {
+  color: #059669 !important;
+}
+
+.el-tag .el-tag__close:hover {
+  background: #A7F3D0 !important;
+  color: #047857 !important;
+}
+
+/* ── ElMessage global override ────────────────────────── */
+.el-message {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  border-radius: 14px !important;
+  padding: 14px 20px !important;
+  min-width: 280px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  border: none !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Sucesso */
+.el-message--success {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+  color: #fff !important;
+}
+.el-message--success .el-message__icon,
+.el-message--success .el-message-icon--success {
+  color: rgba(255,255,255,0.85) !important;
+}
+.el-message--success .el-message__content {
+  color: #fff !important;
+}
+
+/* Erro */
+.el-message--error {
+  background: linear-gradient(135deg, #DC2626, #B91C1C) !important;
+  color: #fff !important;
+}
+.el-message--error .el-message__icon,
+.el-message--error .el-message-icon--error {
+  color: rgba(255,255,255,0.85) !important;
+}
+.el-message--error .el-message__content {
+  color: #fff !important;
+}
+
+/* Warning */
+.el-message--warning {
+  background: linear-gradient(135deg, #D97706, #B45309) !important;
+  color: #fff !important;
+}
+.el-message--warning .el-message__icon,
+.el-message--warning .el-message-icon--warning {
+  color: rgba(255,255,255,0.85) !important;
+}
+.el-message--warning .el-message__content {
+  color: #fff !important;
+}
+
+/* Info */
+.el-message--info {
+  background: linear-gradient(135deg, #065F46, #047857) !important;
+  color: #fff !important;
+}
+.el-message--info .el-message__icon,
+.el-message--info .el-message-icon--info {
+  color: rgba(255,255,255,0.85) !important;
+}
+.el-message--info .el-message__content {
+  color: #fff !important;
+}
+
+/* Ícone de fechar */
+.el-message .el-message__closeBtn {
+  color: rgba(255,255,255,0.7) !important;
+}
+.el-message .el-message__closeBtn:hover {
+  color: #fff !important;
 }

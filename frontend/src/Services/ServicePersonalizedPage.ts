@@ -25,6 +25,23 @@ export class ServicePersonalizedPage {
             return;
         }
     }
+    async updateGallery(pageId: number, files: File[]) {
+        try {
+            const formData = new FormData();
+            files.forEach(f => formData.append('images[]', f));
+            const response = await fetch(this.backendURL + `/api/personalized-page/${pageId}/gallery`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'X-App-Key': import.meta.env.VITE_APP_TOKEN },
+                body: formData,
+            });
+            if (!response.ok) return null;
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
     async getSlugByProjectId(projectId: number){
         try {
             const response = await fetch(this.backendURL + `/api/personalized-page/slug-by-project/${projectId}`, {

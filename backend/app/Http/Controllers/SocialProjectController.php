@@ -41,6 +41,10 @@ class SocialProjectController extends Controller
                 'zipCode'          => 'nullable|string|max:20',
                 'phone'            => 'nullable|string|max:30',
                 'websiteUrl'       => 'nullable|string|max:255',
+                'instagramUrl'     => 'nullable|string|max:255',
+                'facebookUrl'      => 'nullable|string|max:255',
+                'operatingHours'   => 'nullable|string|max:500',
+                'mission'          => 'nullable|string|max:300',
                 'visualColor'      => 'nullable|string|max:20',
                 'activityArea'     => 'nullable|string|max:255',
                 'targetAudiences'  => 'nullable|array',
@@ -49,6 +53,10 @@ class SocialProjectController extends Controller
                 'image'            => 'nullable|file|image|max:4096', // 4MB
                 'wantsPersonalizedPage' => 'nullable|boolean',
                 'selectedTemplate' => 'nullable|string|max:100',
+                'lat'              => 'nullable|numeric',
+                'lng'              => 'nullable|numeric',
+                'gallery'          => 'nullable|array|max:6',
+                'gallery.*'        => 'file|image|max:4096',
             ]);
 
             if ($validator->fails()) {
@@ -59,8 +67,12 @@ class SocialProjectController extends Controller
                 ], 422);
             }
 
-            // Create user using service
-            $socialProject = $this->socialProjectService->createSocialProject($input, $request->file('image'));
+            // Create project using service
+            $socialProject = $this->socialProjectService->createSocialProject(
+                $input,
+                $request->file('image'),
+                $request->file('gallery') ?: []
+            );
 
             return response()->json([
                 'success' => true,
@@ -169,6 +181,10 @@ class SocialProjectController extends Controller
                 'zipCode'          => 'nullable|string|max:20',
                 'phone'            => 'nullable|string|max:30',
                 'websiteUrl'       => 'nullable|string|max:255',
+                'instagramUrl'     => 'nullable|string|max:255',
+                'facebookUrl'      => 'nullable|string|max:255',
+                'operatingHours'   => 'nullable|string|max:500',
+                'mission'          => 'nullable|string|max:300',
                 'visualColor'      => 'nullable|string|max:20',
                 'activityArea'     => 'nullable|string|max:255',
                 'targetAudiences'  => 'nullable|array',

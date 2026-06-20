@@ -17,6 +17,7 @@ class PersonalizedPage extends Model
     protected $fillable = [
         'social_project_id',
         'caption',
+        'gallery_images',
         'url',
         'template'
     ];

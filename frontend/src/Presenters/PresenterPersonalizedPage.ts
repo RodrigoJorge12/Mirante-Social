@@ -12,4 +12,7 @@ export class PresenterPersonalizedPage {
     const URL = baseUrl + `/personalizedPages/${slug}`;
     return URL
   }
+  async updateGallery(pageId: number, files: File[]) {
+    return await this.service.updateGallery(pageId, files);
+  }
 }

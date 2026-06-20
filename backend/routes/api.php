@@ -25,6 +25,7 @@ Route::middleware(['api'])->group(function () {
     Route::get('/socialProject/{id}', [SocialProjectController::class, 'getProjectById']);
     Route::put('/socialProject/{id}', [SocialProjectController::class, 'updateProject']);
     Route::post('/socialProject', [SocialProjectController::class, 'create']);
+    Route::post('/personalized-page/{pageId}/gallery', [PersonalizedPageController::class, 'updateGallery']);
 });
 // ⚙️ Rotas que precisam gravar e ler sessão — força o middleware 'web'
 // Route::middleware(['web'])->group(function () {

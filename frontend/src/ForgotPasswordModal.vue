@@ -101,13 +101,13 @@ const handleRequestCode = async () => {
       if (response?.success) {
         resetForm.email = emailForm.email;
         step.value = "reset";
-        ElMessage.success("Código enviado para o seu e-mail.");
+        ElMessage.success("Código enviado! Verifique sua caixa de entrada.");
       } else {
-        ElMessage.error("Não foi possível enviar o código. Tente novamente.");
+        ElMessage.error("Não encontramos esse e-mail. Verifique e tente novamente.");
       }
     } catch (e) {
       console.error(e);
-      ElMessage.error("Erro ao enviar o código. Tente novamente.");
+      ElMessage.error("Ocorreu um erro ao enviar o código. Tente novamente em instantes.");
     }
   });
 };
@@ -123,15 +123,15 @@ const handleResetPassword = async () => {
 
 
       if (response?.success) {
-        ElMessage.success("Senha alterada com sucesso!");
+        ElMessage.success("Senha alterada com sucesso! Já pode fazer login.");
         dialogVisible.value = false;
         resetAll();
       } else {
-        ElMessage.error("Não foi possível alterar a senha. Verifique o código.");
+        ElMessage.error("Código inválido ou expirado. Solicite um novo código.");
       }
     } catch (e) {
       console.error(e);
-      ElMessage.error("Erro ao alterar a senha. Tente novamente.");
+      ElMessage.error("Ocorreu um erro ao alterar a senha. Tente novamente em instantes.");
     }
   });
 };
@@ -140,17 +140,26 @@ const handleResetPassword = async () => {
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="Recuperar senha"
-    width="420px"
+    width="460px"
     @closed="handleClosed"
+    class="ja-dialog"
   >
+    <template #header>
+      <div class="dialog-header">
+        <span class="dialog-icon">🔐</span>
+        <span class="dialog-title">Recuperar senha</span>
+      </div>
+    </template>
+
     <!-- PASSO 1: SÓ EMAIL -->
     <template v-if="step === 'email'">
+      <p class="dialog-desc">Digite o e-mail da sua conta e enviaremos um código de recuperação.</p>
       <el-form
         ref="emailFormRef"
         :model="emailForm"
         :rules="emailRules"
         label-position="top"
+        class="ja-form"
       >
         <el-form-item label="E-mail" prop="email">
           <el-input
@@ -173,11 +182,13 @@ const handleResetPassword = async () => {
 
     <!-- PASSO 2: CÓDIGO + NOVA SENHA -->
     <template v-else>
+      <p class="dialog-desc">Insira o código recebido no seu e-mail e defina uma nova senha.</p>
       <el-form
         ref="resetFormRef"
         :model="resetForm"
         :rules="resetRules"
         label-position="top"
+        class="ja-form"
       >
         <el-form-item label="E-mail">
           <el-input v-model="resetForm.email" disabled />
@@ -223,7 +234,81 @@ const handleResetPassword = async () => {
 </template>
 
 <style scoped>
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dialog-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.dialog-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #022C22;
+  font-family: Nunito, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.dialog-desc {
+  font-size: 14px;
+  color: #4b7a5e;
+  font-weight: 600;
+  font-family: Nunito, sans-serif;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.ja-form :deep(.el-form-item__label) {
+  font-family: Nunito, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #064E3B;
+  padding-bottom: 4px;
+}
+
+.ja-form :deep(.el-input__wrapper) {
+  border-radius: 12px;
+  border: 2px solid #ECFDF5;
+  background: #F0FDF4;
+  box-shadow: none !important;
+  padding: 4px 12px;
+}
+
+.ja-form :deep(.el-input__wrapper:hover),
+.ja-form :deep(.el-input__wrapper.is-focus) {
+  border-color: #10B981;
+  background: #fff;
+}
+
+.ja-form :deep(.el-input__wrapper.is-disabled) {
+  background: #f7fdf7;
+  border-color: #E4F9EE;
+  opacity: 0.7;
+}
+
+.ja-form :deep(.el-input__inner) {
+  font-family: Nunito, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a2e1a;
+  height: 40px;
+}
+
+.ja-form :deep(.el-input__inner::placeholder) {
+  color: #a0c4a0;
+  font-weight: 500;
+}
+
 .full-btn {
   width: 100%;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 800;
+  border-radius: 14px;
+  font-family: Nunito, sans-serif;
 }
 </style>

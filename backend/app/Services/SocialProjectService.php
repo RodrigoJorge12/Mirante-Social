@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\SocialProject;
 use App\Repository\SocialProjectRepository;
 use Exception;
+use App\Services\GeocodingService;
 
 class SocialProjectService
 {
@@ -27,7 +28,7 @@ class SocialProjectService
 
         return $project;
     }
-    public function createSocialProject(array $data, $image = null)
+    public function createSocialProject(array $data, $image = null, array $galleryFiles = [])
     {
         // Tratamento da imagem
         if ($image) {
@@ -36,6 +37,16 @@ class SocialProjectService
         }
 
 
+
+        // Usa lat/lng do frontend (pin do mini-mapa) se disponíveis,
+        // senão tenta geocodificar pelo CEP
+        $lat = isset($data['lat']) && $data['lat'] !== '' ? (float)$data['lat'] : null;
+        $lng = isset($data['lng']) && $data['lng'] !== '' ? (float)$data['lng'] : null;
+        if (!$lat || !$lng) {
+            $coords = (new GeocodingService())->geocode($data['zipCode'] ?? null);
+            $lat = $coords['lat'] ?? null;
+            $lng = $coords['lng'] ?? null;
+        }
 
         // Normalizar nomes de campos para o Banco
         $normalized = [
@@ -49,10 +60,16 @@ class SocialProjectService
             'zip_code'         => $data['zipCode'] ?? null,
             'phone'            => $data['phone'] ?? null,
             'website_url'      => $data['websiteUrl'] ?? null,
+            'instagram_url'    => $data['instagramUrl'] ?? null,
+            'facebook_url'     => $data['facebookUrl'] ?? null,
+            'operating_hours'  => $data['operatingHours'] ?? null,
+            'mission'          => $data['mission'] ?? null,
             'visual_color'     => $data['visualColor'] ?? null,
             'activity_area'    => $data['activityArea'] ?? null,
             'target_audiences' => json_encode($data['targetAudiences'] ?? []),
             'image_path'       => $data['image_path'] ?? null,
+            'lat'              => $lat,
+            'lng'              => $lng,
         ];
 
         // Envia para o repositório
@@ -60,7 +77,19 @@ class SocialProjectService
 
         if($data['wantsPersonalizedPage']) {
             // Cria página personalizada se solicitado
-            app(PersonalizedPageService::class)->createPersonalizedPage($project->id, $data['selectedTemplate']);
+            $page = app(PersonalizedPageService::class)->createPersonalizedPage($project->id, $data['selectedTemplate']);
+
+            // Salva galeria se houver arquivos
+            if (!empty($galleryFiles)) {
+                $paths = [];
+                foreach ($galleryFiles as $file) {
+                    $paths[] = $file->store('galleryImages', 'public');
+                }
+                if ($page) {
+                    $page->gallery_images = json_encode($paths);
+                    $page->save();
+                }
+            }
         }
         return $project;
     }
@@ -83,6 +112,9 @@ class SocialProjectService
             $data['image_path'] = $path;
         }
 
+        // Geocoding via CEP (BrasilAPI)
+        $coords = (new GeocodingService())->geocode($data['zipCode'] ?? null);
+
         // Normalizar nomes de campos para o Banco
         $normalized = [
             'name'             => $data['name'],
@@ -94,10 +126,16 @@ class SocialProjectService
             'zip_code'         => $data['zipCode'] ?? null,
             'phone'            => $data['phone'] ?? null,
             'website_url'      => $data['websiteUrl'] ?? null,
+            'instagram_url'    => $data['instagramUrl'] ?? null,
+            'facebook_url'     => $data['facebookUrl'] ?? null,
+            'operating_hours'  => $data['operatingHours'] ?? null,
+            'mission'          => $data['mission'] ?? null,
             'visual_color'     => $data['visualColor'] ?? null,
             'activity_area'    => $data['activityArea'] ?? null,
             'target_audiences' => json_encode($data['targetAudiences'] ?? []),
             'image_path'       => $data['image_path'] ?? null,
+            'lat'              => $coords['lat'] ?? null,
+            'lng'              => $coords['lng'] ?? null,
         ];
 
         $project = $this->repository->updateProject($id, $normalized);

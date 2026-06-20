@@ -46,10 +46,39 @@ function handleClick(event) {
 
 <style scoped>
 .mirante-social-button {
-  background-color: #10b981;
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #fff !important;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  border-radius: 12px;
+  padding: 10px 28px;
+  letter-spacing: 0.01em;
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.15s;
 }
 
-/* .mirante-social-button:hover:not(:disabled) {
-@apply brightness-110;
-} */
+.mirante-social-button:hover:not(:disabled) {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+  transform: translateY(-2px);
+}
+
+.mirante-social-button:active:not(:disabled) {
+  background-color: #065F46 !important;
+  border-color: #065F46 !important;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.mirante-social-button:disabled,
+.mirante-social-button.is-disabled {
+  background-color: #A7F3D0 !important;
+  border-color: #A7F3D0 !important;
+  color: #fff !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 </style>

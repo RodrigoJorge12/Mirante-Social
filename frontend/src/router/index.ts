@@ -5,6 +5,8 @@ import CreateUserPage from '@/CreateUserPage.vue'
 import PersonalizedPage from '@/PersonalizedPage.vue'
 import CreateSocialProjectPage from '@/CreateSocialProjectPage.vue'
 import ProjectsByUser from '@/ProjectsByUser.vue'
+import AboutPage from '@/AboutPage.vue'
+import MapPage from '@/MapPage.vue'
 
 
 const router = createRouter({
@@ -28,10 +30,7 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      component: AboutPage,
     },
     {
       path: "/personalizedPages/:slug",
@@ -47,6 +46,11 @@ const router = createRouter({
       path: "/mySocialProjects",
       name: "mySocialProjects",
       component: ProjectsByUser,
+    },
+    {
+      path: "/map",
+      name: "map",
+      component: MapPage,
     },
   ],
 })
