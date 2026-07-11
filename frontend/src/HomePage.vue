@@ -18,6 +18,10 @@ onMounted(async () => {
 const imageUrl = (path: string | null) =>
   path ? `${import.meta.env.VITE_API_URL}/storage/${path}` : "";
 
+function scrollToProjects() {
+  (document.querySelector('.body-wrap') as HTMLElement)?.scrollIntoView({ behavior: 'smooth' });
+}
+
 function normalize(str: string): string {
   return str.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
@@ -106,7 +110,7 @@ function openDetails(project: any) {
           Encontre onde participar ou cadastre o seu gratuitamente.
         </p>
         <div class="hero-actions">
-          <button class="hero-btn-p" @click="document.querySelector('.body-wrap')?.scrollIntoView({ behavior: 'smooth' })">
+          <button class="hero-btn-p" @click="scrollToProjects()">
             Explorar projetos →
           </button>
           <RouterLink to="/criar-projeto" class="hero-btn-s">Cadastrar o meu</RouterLink>
